@@ -16,6 +16,7 @@ void ARunnerCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
+	MoveForward(1);
 }
 
 ARunnerCharacter::ARunnerCharacter()
@@ -62,6 +63,8 @@ void ARunnerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+	PlayerInputComponent->BindAxis("MoveRight", this, &ARunnerCharacter::MoveRight);
 
 }
 

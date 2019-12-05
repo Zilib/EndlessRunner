@@ -17,6 +17,8 @@ void ARunnerCharacter::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 
 	MoveForward(1);
+
+	TotalDistanceTraveled += GetMovementComponent()->Velocity.X * DeltaSeconds;
 }
 
 ARunnerCharacter::ARunnerCharacter()
@@ -85,6 +87,7 @@ void ARunnerCharacter::MoveForward(float Value)
 		// get forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(Direction, Value);
+
 	}
 }
 
@@ -101,4 +104,9 @@ void ARunnerCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+int32 ARunnerCharacter::GetTotalDistanceTraveled()
+{
+	return (int32)TotalDistanceTraveled / 1000;
 }

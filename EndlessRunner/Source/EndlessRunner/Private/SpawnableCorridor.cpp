@@ -18,13 +18,13 @@ void ASpawnableCorridor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorldTimerManager().SetTimer(Handler, this, &ASpawnableCorridor::SpawnCorridor, 1.f, false);
+	GetWorldTimerManager().SetTimer(Handler, this, &ASpawnableCorridor::SpawnCorridor, 0.1f, false);
 }
 
 void ASpawnableCorridor::SpawnCorridor()
 {
 	if (CorridorToSpawn == nullptr) { return; }
-	UE_LOG(LogTemp, Warning, TEXT("%s: Translation"), *GetTransform().ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("%s: Translation"), *GetTransform().ToString());
 	FVector NewLocation = FVector(
 		GetTransform().GetLocation().X + CorridorWidth,
 		GetTransform().GetLocation().Y,

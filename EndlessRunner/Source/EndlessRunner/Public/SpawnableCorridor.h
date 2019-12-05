@@ -19,6 +19,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 private:
+
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	TSubclassOf<ASpawnableCorridor> CorridorToSpawn { nullptr };
 

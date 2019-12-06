@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "RunnerCharacter.generated.h"
 
+class UUserWidget;
+
 UCLASS()
 class ENDLESSRUNNER_API ARunnerCharacter : public ACharacter
 {
@@ -35,6 +37,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	int32 GetTotalDistanceTraveled();
+
 protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
@@ -46,11 +49,12 @@ protected:
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	 */
 	void TurnAtRate(float Rate);
-
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
 	virtual void Tick(float DeltaSeconds) override;
+
+	virtual void BeginPlay() override;
 private:
 	float TotalDistanceTraveled{ 0.0f };
 

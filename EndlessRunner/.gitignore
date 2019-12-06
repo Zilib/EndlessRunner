@@ -74,5 +74,6 @@ Plugins/*/Intermediate/*
 
 Binaries/*
 Content/StarterContent
-
+Content/Imported
+Content/MaterControlMaterial
 # Cache files for the editor to use

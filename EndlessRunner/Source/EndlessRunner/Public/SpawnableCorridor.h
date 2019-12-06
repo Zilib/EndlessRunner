@@ -38,5 +38,4 @@ private:
 	FTimerHandle Handler;
 
 	void CreateCollisionBox();
-
 };

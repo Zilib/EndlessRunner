@@ -118,10 +118,12 @@ void ARunnerCharacter::TurnARunner(float Value)
 	const FRotator Rotation = Controller->GetControlRotation();
 	const FRotator NewRotation = FRotator(
 		Rotation.Pitch,
-		Rotation.Yaw - Value * GetWorld()->GetDeltaSeconds(),
+		Rotation.Yaw + Value,
 		Rotation.Roll
 	);
-	Controller->SetControlRotation(NewRotation);
+	Controller->SetControlRotation(NewRotation); 
+
+
 }
 
 int32 ARunnerCharacter::GetTotalDistanceTraveled()

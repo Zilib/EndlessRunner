@@ -61,4 +61,6 @@ protected:
 private:
 	float TotalDistanceTraveled{ 0.0f };
 
+	FTimerHandle RotateRunner;
+	float RotatePerMiliSecond;
 };

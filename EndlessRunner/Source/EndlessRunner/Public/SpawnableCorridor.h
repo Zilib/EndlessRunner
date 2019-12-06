@@ -16,17 +16,21 @@ class ENDLESSRUNNER_API ASpawnableCorridor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ASpawnableCorridor();
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* CorridorMesh{ nullptr };
+
+	UFUNCTION(BlueprintCallable)
+	void SetMesh(UStaticMesh* MeshToSet);
+
 protected:
 	virtual void BeginPlay() override;
+
 private:
-
-	UPROPERTY(EditAnywhere, Category = "Setup")
-	TSubclassOf<ASpawnableCorridor> CorridorToSpawn { nullptr };
-
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	float CorridorWidth{ 600.0f };
 
 	FTimerHandle Handler;
 
-	void SpawnCorridor();
+
 };

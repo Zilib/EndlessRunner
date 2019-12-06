@@ -35,7 +35,7 @@ void AMapSpawner::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-void AMapSpawner::SpawnNextCorridor(UStaticMesh* MeshToSet)
+void AMapSpawner::SpawnNextCorridor(UStaticMesh* MeshToSet, bool isCorner)
 {
 	if (!ensure(StartPlatform)) { return; }
 	if (!ensure(CorridorToSpawn)) { return; }
@@ -43,6 +43,7 @@ void AMapSpawner::SpawnNextCorridor(UStaticMesh* MeshToSet)
 		CorridorToSpawn,
 		LastCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPoint"))
 		); 
-	LastCorridor->SetMesh(MeshToSet);
+	LastCorridor->SetMesh(MeshToSet, isCorner);
+
 }
 

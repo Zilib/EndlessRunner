@@ -15,7 +15,18 @@ ASpawnableCorridor::ASpawnableCorridor()
 
 	CorridorMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Corridor"));
 	SetRootComponent(CorridorMesh);
+
+	CreateCollisionBox();
 }
+
+void ASpawnableCorridor::CreateCollisionBox()
+{
+	CollisionBox = CreateDefaultSubobject<UBoxComponent>(FName("Box Component"));
+	CollisionBox->AttachTo(CorridorMesh);
+	CollisionBox->SetRelativeLocation(FVector(-89.0f, 0.0f, 70.0f));
+	CollisionBox->SetRelativeScale3D(FVector(1.0f, 8.5f, 1.0f));
+}
+
 void ASpawnableCorridor::BeginPlay()
 {
 	Super::BeginPlay();
@@ -23,7 +34,8 @@ void ASpawnableCorridor::BeginPlay()
 //	GetWorldTimerManager().SetTimer(Handler, this, &ASpawnableCorridor::SpawnCorridor, 0.1f, false);
 }
 
-void ASpawnableCorridor::SetMesh(UStaticMesh* MeshToSet)
+void ASpawnableCorridor::SetMesh(UStaticMesh* MeshToSet,bool isCorner)
 {
 	CorridorMesh->SetStaticMesh(MeshToSet);
+	this->isCorner = isCorner;
 }

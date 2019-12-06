@@ -35,7 +35,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	void SpawnNextCorridor(UStaticMesh* MeshToSet);
+	void SpawnNextCorridor(UStaticMesh* MeshToSet, bool isCorner);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<FName,UStaticMesh*> StaticMeshes;

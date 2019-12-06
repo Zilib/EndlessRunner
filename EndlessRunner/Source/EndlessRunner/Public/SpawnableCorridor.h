@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "TimerManager.h"
 #include "GameFramework/Actor.h"
+#include "Components/BoxComponent.h"
 #include "SpawnableCorridor.generated.h"
-
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class ENDLESSRUNNER_API ASpawnableCorridor : public AActor
@@ -17,12 +17,17 @@ public:
 	// Sets default values for this actor's properties
 	ASpawnableCorridor();
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* CorridorMesh{ nullptr };
 
 	UFUNCTION(BlueprintCallable)
-	void SetMesh(UStaticMesh* MeshToSet);
+	void SetMesh(UStaticMesh* MeshToSet, bool isCorner);
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UBoxComponent* CollisionBox { nullptr };
+
+	UPROPERTY(BlueprintReadWrite)
+	bool isCorner{ false };
 protected:
 	virtual void BeginPlay() override;
 
@@ -32,5 +37,6 @@ private:
 
 	FTimerHandle Handler;
 
+	void CreateCollisionBox();
 
 };

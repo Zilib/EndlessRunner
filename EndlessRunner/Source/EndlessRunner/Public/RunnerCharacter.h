@@ -38,6 +38,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	int32 GetTotalDistanceTraveled();
 
+	UFUNCTION(BlueprintCallable)
+	void TurnARunner(float Value);
 protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
@@ -55,6 +57,7 @@ protected:
 	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void BeginPlay() override;
+
 private:
 	float TotalDistanceTraveled{ 0.0f };
 

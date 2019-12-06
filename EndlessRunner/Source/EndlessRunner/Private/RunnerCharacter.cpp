@@ -122,7 +122,7 @@ void ARunnerCharacter::TurnARunner(float Value)
 		Rotation.Roll
 	);
 	Controller->SetControlRotation(NewRotation); 
-
+	UE_LOG(LogTemp,Warning,TEXT("%f"), Value)
 
 }
 

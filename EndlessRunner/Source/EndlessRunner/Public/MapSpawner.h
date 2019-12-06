@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "SpawnableCorridor.h"
+#include "TimerManager.h"
 #include "MapSpawner.generated.h"
 
 class AStaticMeshActor;
@@ -26,7 +27,10 @@ private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ASpawnableCorridor>CorridorToSpawn;
 
+	bool IsMapGenerated{ false }; // Map is generated when 100 corridors is created, after it create everything slowely
+	int32 SpawnedCorridors{ 0 };
 
+	FTimerHandle CreateCorridorHandler;
 public:	
 	// Sets default values for this actor's properties
 	AMapSpawner();

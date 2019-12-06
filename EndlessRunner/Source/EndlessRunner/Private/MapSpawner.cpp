@@ -4,6 +4,8 @@
 #include "MapSpawner.h"
 #include "Engine/StaticMeshActor.h"
 #include "Engine/World.h"
+#include "TimerManager.h"
+#include "Math/UnrealMathUtility.h"
 #include "GameFramework/Actor.h"
 #include "Engine/StaticMesh.h"
 
@@ -34,6 +36,34 @@ void AMapSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
+	// Before game start, generate 100 corridors, cuz player will see generate proces
+	if (!GetWorldTimerManager().IsTimerActive(CreateCorridorHandler) && SpawnedCorridors < 5)
+	{
+		int32 RandomNumber = FMath::RandRange(2, 5);
+
+
+		if ((SpawnedCorridors + 1) % RandomNumber == 0)
+		{
+			SpawnNextCorridor(
+				StaticMeshes.FindRef(FName("Corner")),
+				true
+			);
+		}
+		else if ((SpawnedCorridors + 1) % RandomNumber != 0)
+		{
+			SpawnNextCorridor(
+				StaticMeshes.FindRef(FName("Straight")),
+				false
+			);
+		}
+		SpawnedCorridors++;
+	}
+	else if (SpawnedCorridors == 100 && !GetWorldTimerManager().IsTimerActive(CreateCorridorHandler))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Udalo sie! Brawo"));
+		SpawnedCorridors++;
+	}
 }
 void AMapSpawner::SpawnNextCorridor(UStaticMesh* MeshToSet, bool isCorner)
 {

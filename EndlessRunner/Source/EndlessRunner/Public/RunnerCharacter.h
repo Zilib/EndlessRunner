@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "MyGameInstance.h"
 #include "RunnerCharacter.generated.h"
 
 class UUserWidget;
@@ -62,5 +63,6 @@ private:
 	float TotalDistanceTraveled{ 0.0f };
 
 	FTimerHandle RotateRunner;
+
 	float RotatePerMiliSecond;
 };

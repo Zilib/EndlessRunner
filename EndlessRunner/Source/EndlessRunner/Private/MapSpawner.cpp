@@ -41,7 +41,6 @@ void AMapSpawner::Tick(float DeltaTime)
 	if (!GetWorldTimerManager().IsTimerActive(CreateCorridorHandler) && SpawnedCorridors < 100)
 	{
 		int32 RandomNumber = FMath::RandRange(1, 30);
-		UE_LOG(LogTemp, Warning, TEXT("%d"), SpawnedCorridors);
 		LastCorridor = GetWorld()->SpawnActor<ACorridor>(
 			(SpawnedCorridors+1) % 50 == 0 ? Corridors[1] : Corridors[0],
 			LastCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPoint"))

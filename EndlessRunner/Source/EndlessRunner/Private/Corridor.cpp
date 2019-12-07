@@ -4,6 +4,9 @@
 #include "Corridor.h"
 #include "TimerManager.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/Controller.h"
+#include "MyGameInstance.h"
+#include "GameFramework/Pawn.h"
 #include "Engine/StaticMesh.h"
 
 // Sets default values
@@ -35,9 +38,11 @@ void ACorridor::CreateCollisionBox()
 
 void ACorridor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-
-	FTimerHandle TimeToDestroy;
-	GetWorldTimerManager().SetTimer(TimeToDestroy, this, &ACorridor::DestroyObject, 3.0f, false);
+	if (OtherActor->GetName() == Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName)
+	{
+		FTimerHandle TimeToDestroy;
+		GetWorldTimerManager().SetTimer(TimeToDestroy, this, &ACorridor::DestroyObject, 3.0f, false);
+	}
 }
 
 void ACorridor::DestroyObject()

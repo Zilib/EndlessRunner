@@ -13,5 +13,13 @@ UCLASS()
 class ENDLESSRUNNER_API UMyGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
-	
+public:
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	FString RunnerBPName;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FString CollectingItemName{ "Bottle" };
+
+	UPROPERTY(BlueprintReadWrite)
+	int32 CollectedItem{ 0 };
 };

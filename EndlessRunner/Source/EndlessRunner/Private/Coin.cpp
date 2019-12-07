@@ -4,6 +4,7 @@
 #include "Coin.h"
 #include "Engine/World.h"
 #include "MyGameInstance.h"
+#include "GameFramework/Actor.h"
 #include "Engine/StaticMesh.h"
 
 // Sets default values
@@ -32,5 +33,7 @@ void ACoin::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 	if (OtherActor->GetName() == Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName)
 	{
 		Cast<UMyGameInstance>(GetGameInstance())->CollectedItem++;
+		Destroy();
+		UE_LOG(LogTemp, Warning, TEXT("TESTUJE"));
 	}
 }

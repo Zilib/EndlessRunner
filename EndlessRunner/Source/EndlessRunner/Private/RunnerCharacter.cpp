@@ -18,7 +18,10 @@ void ARunnerCharacter::Tick(float DeltaSeconds)
 
 	MoveForward(1);
 
-	TotalDistanceTraveled += GetMovementComponent()->Velocity.X * DeltaSeconds;
+	GetMovementComponent()->Velocity.X > 0 ? TotalDistanceTraveled += GetMovementComponent()->Velocity.X * DeltaSeconds : NULL;
+	GetMovementComponent()->Velocity.Y > 0 ? TotalDistanceTraveled += GetMovementComponent()->Velocity.Y * DeltaSeconds : NULL;
+	GetMovementComponent()->Velocity.Z > 0 ? TotalDistanceTraveled += GetMovementComponent()->Velocity.Z * DeltaSeconds : NULL;
+
 }
 
 ARunnerCharacter::ARunnerCharacter()

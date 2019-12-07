@@ -14,7 +14,7 @@ ACorridor::ACorridor()
 
 	CorridorMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Corridor"));
 	SetRootComponent(CorridorMesh);
-
+	
 	CreateCollisionBox();
 }
 

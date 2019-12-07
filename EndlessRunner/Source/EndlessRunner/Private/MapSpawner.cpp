@@ -38,10 +38,15 @@ void AMapSpawner::Tick(float DeltaTime)
 
 
 	// Before game start, generate 100 corridors, cuz player will see generate proces
-	if (!GetWorldTimerManager().IsTimerActive(CreateCorridorHandler) && SpawnedCorridors < 5)
+	if (!GetWorldTimerManager().IsTimerActive(CreateCorridorHandler) && SpawnedCorridors < 100)
 	{
-		int32 RandomNumber = FMath::RandRange(2, 5);
-
+		int32 RandomNumber = FMath::RandRange(1, 30);
+		UE_LOG(LogTemp, Warning, TEXT("%d"), SpawnedCorridors);
+		LastCorridor = GetWorld()->SpawnActor<ACorridor>(
+			(SpawnedCorridors+1) % 50 == 0 ? Corridors[1] : Corridors[0],
+			LastCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPoint"))
+			);
+		SpawnedCorridors++;
 	}
 	else if (SpawnedCorridors == 100 && !GetWorldTimerManager().IsTimerActive(CreateCorridorHandler))
 	{

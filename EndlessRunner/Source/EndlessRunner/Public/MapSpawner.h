@@ -5,11 +5,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "SpawnableCorridor.h"
+#include "Corridor.h"
 #include "TimerManager.h"
 #include "MapSpawner.generated.h"
 
 class AStaticMeshActor;
-class ASpawnableCorridor;
+class ACorridor;
 
 UCLASS()
 class ENDLESSRUNNER_API AMapSpawner : public AActor
@@ -24,13 +25,12 @@ private:
 	UPROPERTY(EditAnywhere)
 	AStaticMeshActor* StartPlatform{ nullptr };
 
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<ASpawnableCorridor>CorridorToSpawn;
-
 	bool IsMapGenerated{ false }; // Map is generated when 100 corridors is created, after it create everything slowely
 	int32 SpawnedCorridors{ 0 };
 
 	FTimerHandle CreateCorridorHandler;
+
+	ACorridor* LastCorridor;
 public:	
 	// Sets default values for this actor's properties
 	AMapSpawner();
@@ -42,8 +42,6 @@ public:
 	void SpawnNextCorridor(UStaticMesh* MeshToSet, bool isCorner);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<FName,UStaticMesh*> StaticMeshes;
+	TArray<TSubclassOf<ACorridor>> Corridors;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	ASpawnableCorridor* LastCorridor;
 };

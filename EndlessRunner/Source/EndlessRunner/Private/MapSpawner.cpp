@@ -23,10 +23,10 @@ void AMapSpawner::BeginPlay()
 	Super::BeginPlay();
 	
 	if (!ensure(StartPlatform)) { return; }
-	if (!ensure(CorridorToSpawn)) { return; }
+//	if (!ensure(CorridorToSpawn)) { return; }
 
-	LastCorridor = GetWorld()->SpawnActor<ASpawnableCorridor>(
-		CorridorToSpawn,
+	LastCorridor = GetWorld()->SpawnActor<ACorridor>(
+		Corridors[1],
 		StartPlatform->GetStaticMeshComponent()->GetSocketTransform(FName("SpawnPoint"))
 		);
 	
@@ -42,22 +42,6 @@ void AMapSpawner::Tick(float DeltaTime)
 	{
 		int32 RandomNumber = FMath::RandRange(2, 5);
 
-
-		if ((SpawnedCorridors + 1) % RandomNumber == 0)
-		{
-			SpawnNextCorridor(
-				StaticMeshes.FindRef(FName("Corner")),
-				true
-			);
-		}
-		else if ((SpawnedCorridors + 1) % RandomNumber != 0)
-		{
-			SpawnNextCorridor(
-				StaticMeshes.FindRef(FName("Straight")),
-				false
-			);
-		}
-		SpawnedCorridors++;
 	}
 	else if (SpawnedCorridors == 100 && !GetWorldTimerManager().IsTimerActive(CreateCorridorHandler))
 	{
@@ -68,12 +52,10 @@ void AMapSpawner::Tick(float DeltaTime)
 void AMapSpawner::SpawnNextCorridor(UStaticMesh* MeshToSet, bool isCorner)
 {
 	if (!ensure(StartPlatform)) { return; }
-	if (!ensure(CorridorToSpawn)) { return; }
-	LastCorridor = GetWorld()->SpawnActor<ASpawnableCorridor>(
-		CorridorToSpawn,
-		LastCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPoint"))
-		); 
-	LastCorridor->SetMesh(MeshToSet, isCorner);
+//	LastCorridor = GetWorld()->SpawnActor<ACorridor>(
+	//	CorridorToSpawn,
+	//	LastCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPoint"))
+	//	); 
 
 }
 

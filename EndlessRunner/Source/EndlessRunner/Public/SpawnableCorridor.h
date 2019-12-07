@@ -32,9 +32,6 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	UPROPERTY(EditAnywhere, Category = "Setup")
-	float CorridorWidth{ 600.0f };
-
 	FTimerHandle Handler;
 
 	void CreateCollisionBox();

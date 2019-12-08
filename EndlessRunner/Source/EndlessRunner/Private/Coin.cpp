@@ -35,6 +35,5 @@ void ACoin::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 	{
 		Cast<UMyGameInstance>(GetGameInstance())->CollectedItem++;
 		Destroy();
-		UE_LOG(LogTemp, Warning, TEXT("TESTUJE"));
 	}
 }

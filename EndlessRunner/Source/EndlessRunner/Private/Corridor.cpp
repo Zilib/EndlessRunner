@@ -30,10 +30,10 @@ void ACorridor::BeginPlay()
 	Super::BeginPlay();
 	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ACorridor::OnOverlapBegin);
 
-	SpawnCoins();
+	SpawnCoin();
 }
 
-void ACorridor::SpawnCoins()
+void ACorridor::SpawnCoin()
 {
 	// It will spawn in one row
 	int32 NumberOfRows = SpawnPointNames.Num();
@@ -41,7 +41,7 @@ void ACorridor::SpawnCoins()
 	FName SpawnPoint = SpawnPointNames[RandomNumber];
 
 	// You can spawn only subclass of... Remember
-	GetWorld()->SpawnActor<ACoin>(
+	SpawnedCoin = GetWorld()->SpawnActor<ACoin>(
 		CoinToSpawn,
 		CorridorMesh->GetSocketTransform(SpawnPoint)
 		);
@@ -59,6 +59,7 @@ void ACorridor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Othe
 {
 	if (OtherActor->GetName() == Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName)
 	{
+
 		FTimerHandle TimeToDestroy;
 		GetWorldTimerManager().SetTimer(TimeToDestroy, this, &ACorridor::DestroyObject, 3.0f, false);
 	}
@@ -66,7 +67,11 @@ void ACorridor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Othe
 
 void ACorridor::DestroyObject()
 {
-	
+	// if spawned coin exists, and you cannot collect it any more. Just destroy it
+	if (IsValid(SpawnedCoin))
+	{
+		SpawnedCoin->Destroy();
+	}
 	Destroy();
 }
 

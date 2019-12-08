@@ -43,8 +43,10 @@ private:
 
 	FTimerHandle Handler;
 
-	void SpawnCoins();
+	void SpawnCoin();
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ACoin> CoinToSpawn;
+
+	ACoin* SpawnedCoin;
 };

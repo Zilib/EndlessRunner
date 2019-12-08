@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/Controller.h"
 #include "MyGameInstance.h"
+#include "Coin.h"
+#include "Engine/World.h"
 #include "GameFramework/Pawn.h"
 #include "Engine/StaticMesh.h"
 
@@ -19,6 +21,7 @@ ACorridor::ACorridor()
 	SetRootComponent(CorridorMesh);
 	
 	CreateCollisionBox();
+
 }
 
 // Called when the game starts or when spawned
@@ -26,6 +29,22 @@ void ACorridor::BeginPlay()
 {
 	Super::BeginPlay();
 	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ACorridor::OnOverlapBegin);
+
+	SpawnCoins();
+}
+
+void ACorridor::SpawnCoins()
+{
+	// It will spawn in one row
+	int32 NumberOfRows = SpawnPointNames.Num();
+	int32 RandomNumber = FMath::RandRange(0, NumberOfRows -1 );
+	FName SpawnPoint = SpawnPointNames[RandomNumber];
+
+	// You can spawn only subclass of... Remember
+	GetWorld()->SpawnActor<ACoin>(
+		CoinToSpawn,
+		CorridorMesh->GetSocketTransform(SpawnPoint)
+		);
 }
 
 void ACorridor::CreateCollisionBox()

@@ -6,7 +6,9 @@
 #include "TimerManager.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
+#include "Coin.h"
 #include "Corridor.generated.h"
+
 
 UCLASS()
 class ENDLESSRUNNER_API ACorridor : public AActor
@@ -22,6 +24,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* CorridorMesh{ nullptr };
+
+	UPROPERTY(EditAnywhere)
+	TArray<FName> SpawnPointNames; // Array of rows and cols
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -32,9 +38,13 @@ protected:
 private:
 	void CreateCollisionBox();
 
-
 	// After begin overlap wait 3 second and destroy this element. 
 	void DestroyObject();
 
 	FTimerHandle Handler;
+
+	void SpawnCoins();
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ACoin> CoinToSpawn;
 };

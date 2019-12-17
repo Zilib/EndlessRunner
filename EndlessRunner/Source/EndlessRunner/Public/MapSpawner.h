@@ -22,15 +22,17 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	// Here i will hold a new object, for get next spawn location.
+	// Firstly you need to give me a first object, because i do not know where should i spawn next object
+	// Basicly it would be a start platform.
 	UPROPERTY(EditAnywhere)
-	AStaticMeshActor* StartPlatform{ nullptr };
+	ACorridor* CorridorToGetTransform{ nullptr };
 
 	bool IsMapGenerated{ false }; // Map is generated when 100 corridors is created, after it create everything slowely
 	int32 SpawnedCorridors{ 0 };
 
 	FTimerHandle CreateCorridorHandler;
 
-	ACorridor* LastCorridor;
 public:	
 	// Sets default values for this actor's properties
 	AMapSpawner();

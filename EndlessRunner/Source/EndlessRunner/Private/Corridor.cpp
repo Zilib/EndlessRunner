@@ -20,7 +20,7 @@ ACorridor::ACorridor()
 	CorridorMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Corridor"));
 	SetRootComponent(CorridorMesh);
 	
-	CreateCollisionBox();
+	//CreateCollisionBox();
 
 }
 
@@ -28,9 +28,9 @@ ACorridor::ACorridor()
 void ACorridor::BeginPlay()
 {
 	Super::BeginPlay();
-	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ACorridor::OnOverlapBegin);
+	//CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ACorridor::OnOverlapBegin);
 
-	SpawnCoin();
+	//SpawnCoin();
 }
 
 void ACorridor::SpawnCoin()

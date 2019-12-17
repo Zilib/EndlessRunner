@@ -22,13 +22,27 @@ void AMapSpawner::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	if (!ensure(StartPlatform)) { return; }
+	if (!ensure(CorridorToGetTransform)) { return; }
+	for (int i = 0; i < 10; i++)
+	{
+		FTransform SocketTransform = CorridorToGetTransform->CorridorMesh->GetSocketTransform(FName("SpawnPoint"));
+		FVector NewLocation = FVector(
+			SocketTransform.GetLocation().X + (CorridorToGetTransform->CorridorLength / 2),
+			SocketTransform.GetLocation().Y,
+			SocketTransform.GetLocation().Z
+		);
+
+		FTransform NewTransform = FTransform(
+			SocketTransform.GetRotation(),
+			NewLocation,
+			SocketTransform.GetScale3D());
+		CorridorToGetTransform = GetWorld()->SpawnActor<ACorridor>(
+			Corridors[0],
+			NewTransform
+			);
+	}
 //	if (!ensure(CorridorToSpawn)) { return; }
 
-	LastCorridor = GetWorld()->SpawnActor<ACorridor>(
-		Corridors[1],
-		StartPlatform->GetStaticMeshComponent()->GetSocketTransform(FName("SpawnPoint"))
-		);
 	
 }
 // Called every frame
@@ -38,7 +52,7 @@ void AMapSpawner::Tick(float DeltaTime)
 
 
 	// Before game start, generate 100 corridors, cuz player will see generate proces
-	if (!GetWorldTimerManager().IsTimerActive(CreateCorridorHandler) && SpawnedCorridors < 100)
+/*	if (!GetWorldTimerManager().IsTimerActive(CreateCorridorHandler) && SpawnedCorridors < 100)
 	{
 		int32 RandomNumber = FMath::RandRange(1, 30);
 		LastCorridor = GetWorld()->SpawnActor<ACorridor>(
@@ -51,11 +65,10 @@ void AMapSpawner::Tick(float DeltaTime)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Udalo sie! Brawo"));
 		SpawnedCorridors++;
-	}
+	}*/
 }
 void AMapSpawner::SpawnNextCorridor(UStaticMesh* MeshToSet, bool isCorner)
 {
-	if (!ensure(StartPlatform)) { return; }
 //	LastCorridor = GetWorld()->SpawnActor<ACorridor>(
 	//	CorridorToSpawn,
 	//	LastCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPoint"))

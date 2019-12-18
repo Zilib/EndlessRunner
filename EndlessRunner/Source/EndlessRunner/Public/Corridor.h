@@ -27,14 +27,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TArray<FName> SpawnPointNames; // Array of rows and cols
-
-	// This variable is needed because, i need to precice where next object will spawn.
-	// Basiclly it is 500.0f thats mean 500cm
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	float CorridorLength{ 500.0f };
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	float CorridorWidth{ 250.0f };
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

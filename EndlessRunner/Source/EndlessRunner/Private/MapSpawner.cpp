@@ -28,39 +28,57 @@ void AMapSpawner::BeginPlay()
 	auto ToShow = PreviousCorridor->GetActorRotation();
 	UE_LOG(LogTemp, Warning, TEXT("%s dsadsadas"), *ToShow.ToString());
 
-	GetWorld()->GetTimerManager().SetTimer(hTimer, this, &AMapSpawner::SpawnCorridor, 1.0f, true);
+	GetWorld()->GetTimerManager().SetTimer(hTimer, this, &AMapSpawner::GenerateMap, 1.0f, true);
 }
 
-void AMapSpawner::SpawnCorridor()
+void AMapSpawner::GenerateMap()
 {
-	// Get position where should be spawned corridor
-	FTransform SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform("SpawnPoint");
-
+	TSubclassOf<ACorridor> CorridorToSpawn = NULL;
 	// Spawn turn left corridor
 	if (RandomGenerator(ChanceToTurnLeft) && CanTurnLeft == true)
 	{
 		CanTurnLeft = false;
-		CanTurnRight = CanTurnRight == true;
+		CanTurnRight = true;
 
-		TSubclassOf<ACorridor> CorridorToSpawn = *Corridors.Find(FName("Turn Left"));
+		CorridorToSpawn = *Corridors.Find(FName("Turn Left"));
 
-
-		FVector NewLocation = FVector(
-			SpawnPointTransform.GetLocation().X + (CorridorToSpawn.GetDefaultObject()->CorridorLength / 2),
-			SpawnPointTransform.GetLocation().Y + (CorridorToSpawn.GetDefaultObject()->CorridorWidth / 2),
-			SpawnPointTransform.GetLocation().Z
-		);
-
-		FTransform NewTransform = FTransform(
-			SpawnPointTransform.GetRotation(),
-			NewLocation,
-			SpawnPointTransform.GetScale3D()
-		);
+		// Get position where should be spawned corridor
+		FTransform SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform("SpawnPointTurnLeft");
 
 		PreviousCorridor = GetWorld()->SpawnActor<ACorridor>(
-			*Corridors.Find(FName("Turn Left")),
-			NewTransform
-		); 
+			CorridorToSpawn,
+			SpawnPointTransform
+			);
+	}
+	else if (RandomGenerator(ChanceToTurnRight) && CanTurnRight == true)
+	{
+		CanTurnRight = false;
+		CanTurnLeft = true;
+
+		CorridorToSpawn = *Corridors.Find(FName("Turn Right"));
+
+		// Get position where should be spawned corridor
+		FTransform SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform("SpawnPointTurnRight");
+
+		PreviousCorridor = GetWorld()->SpawnActor<ACorridor>(
+			CorridorToSpawn,
+			SpawnPointTransform
+			);
+	}
+	else
+	{
+		CanTurnLeft = true;
+		CanTurnLeft = true;
+
+		CorridorToSpawn = *Corridors.Find(FName("Straight"));
+
+		// Get position where should be spawned corridor
+		FTransform SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform("SpawnPointStraight");
+
+		PreviousCorridor = GetWorld()->SpawnActor<ACorridor>(
+			CorridorToSpawn,
+			SpawnPointTransform
+			);
 	}
 }
 

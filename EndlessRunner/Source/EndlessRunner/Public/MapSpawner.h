@@ -29,7 +29,9 @@ private:
 	ACorridor* PreviousCorridor{ nullptr };
 
 	UFUNCTION()
-	void SpawnCorridor();
+	void GenerateMap();
+
+	void SpawnCorridor(TSubclassOf<ACorridor> CorridorToSpawn);
 
 	bool IsMapGenerated{ false }; // Map is generated when 100 corridors is created, after it create everything slowely
 	int32 SpawnedCorridors{ 0 };
@@ -49,7 +51,10 @@ private:
 	int32 ChanceToJump{ 10 };
 
 	UPROPERTY(EditDefaultsOnly, Category = "Chances setup")
-	int32 ChanceToTurnLeft{ 100 };
+	int32 ChanceToTurnLeft{ 10 };
+
+	UPROPERTY(EditDefaultsOnly, Category = "Chances setup")
+	int32 ChanceToTurnRight{ 10 };
 	// A function which will check and make random function.
 	bool RandomGenerator(int Chance);
 public:	

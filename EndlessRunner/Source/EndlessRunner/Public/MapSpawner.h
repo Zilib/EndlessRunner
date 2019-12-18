@@ -26,13 +26,32 @@ private:
 	// Firstly you need to give me a first object, because i do not know where should i spawn next object
 	// Basicly it would be a start platform.
 	UPROPERTY(EditAnywhere)
-	ACorridor* CorridorToGetTransform{ nullptr };
+	ACorridor* PreviousCorridor{ nullptr };
+
+	UFUNCTION()
+	void SpawnCorridor();
 
 	bool IsMapGenerated{ false }; // Map is generated when 100 corridors is created, after it create everything slowely
 	int32 SpawnedCorridors{ 0 };
 
-	FTimerHandle CreateCorridorHandler;
+	FTimerHandle hTimer;
 
+	// Try to avoid sytuation where corridors will make a square, it will never can make twice this same kind of turn corridor.
+	bool CanTurnLeft{ true };
+	bool CanTurnRight{ true };
+
+	// In percent, it determines chance to make a space between next corridor, which mean that a player have to jump over it.
+	UPROPERTY(EditDefaultsOnly, Category = "Chances setup")
+	int32 ChanceToGreaterDistance{ 25 };
+
+	// If yes, map will spawn next corridor over an previous corridor
+	UPROPERTY(EditDefaultsOnly, Category = "Chances setup")
+	int32 ChanceToJump{ 10 };
+
+	UPROPERTY(EditDefaultsOnly, Category = "Chances setup")
+	int32 ChanceToTurnLeft{ 100 };
+	// A function which will check and make random function.
+	bool RandomGenerator(int Chance);
 public:	
 	// Sets default values for this actor's properties
 	AMapSpawner();
@@ -40,10 +59,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable)
-	void SpawnNextCorridor(UStaticMesh* MeshToSet, bool isCorner);
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<TSubclassOf<ACorridor>> Corridors;
+	TMap<FName,TSubclassOf<ACorridor>> Corridors;
 
 };

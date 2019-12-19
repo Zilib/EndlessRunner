@@ -25,13 +25,12 @@ void AMapSpawner::BeginPlay()
 	Super::BeginPlay();
 	
 	if (!ensure(PreviousCorridor)) { return; }
-	if (Corridors.Num() == 0) { return;  }
-
-	auto ToShow = PreviousCorridor->GetActorRotation();
+	if (Corridors.Num() == 0) { return;  } 
 
 	GetWorld()->GetTimerManager().SetTimer(hTimer, this, &AMapSpawner::GenerateMap, .5f, true);
 }
 
+// Calculate difference in X forward vector
 float AMapSpawner::DistanceObstacle()
 {
 	if (!ensure(RunnerHero)) { return 0; }

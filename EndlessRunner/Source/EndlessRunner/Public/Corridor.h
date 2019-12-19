@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "TimerManager.h"
-#include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
 #include "Coin.h"
 #include "Corridor.generated.h"
@@ -26,11 +25,12 @@ public:
 	UStaticMeshComponent* CorridorMesh{ nullptr };
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	TArray<FName> SpawnPointNames; // Array of rows and cols
+	TArray<FName> SpawnPointNames; // Array of names rows and cols
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	/// Basiclly only for destory objects
 	UFUNCTION()
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 

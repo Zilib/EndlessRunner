@@ -70,6 +70,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Straight, Turn etc...
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<FName,TSubclassOf<ACorridor>> Corridors;
 

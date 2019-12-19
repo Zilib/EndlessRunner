@@ -3,12 +3,8 @@
 
 #include "Corridor.h"
 #include "TimerManager.h"
-#include "GameFramework/Actor.h"
-#include "GameFramework/Controller.h"
 #include "MyGameInstance.h"
 #include "Coin.h"
-#include "Engine/World.h"
-#include "GameFramework/Pawn.h"
 #include "Engine/StaticMesh.h"
 
 // Sets default values
@@ -51,9 +47,12 @@ void ACorridor::SpawnCoin()
 void ACorridor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (!Cast<UMyGameInstance>(GetGameInstance())) { return; }
+
+	// If collision is with hero
 	if (OtherActor->GetName() == Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName)
 	{
 		FTimerHandle TimeToDestroy;
+		// set timer and after X time destroy object, and spawned items thankfully this object.
 		GetWorldTimerManager().SetTimer(TimeToDestroy, this, &ACorridor::DestroyObject, 3.0f, false);
 	}
 }

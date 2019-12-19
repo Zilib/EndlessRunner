@@ -2,13 +2,11 @@
 
 
 #include "RunnerCharacter.h"
-#include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "MyGameInstance.h"
-#include "Engine/GameInstance.h" 
 #include "Math/UnrealMathUtility.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -21,6 +19,7 @@ void ARunnerCharacter::Tick(float DeltaSeconds)
 
 	MoveForward(1);
 
+	// Increase traveled distance 
 	GetMovementComponent()->Velocity.X > 0 ? TotalDistanceTraveled += GetMovementComponent()->Velocity.X * DeltaSeconds : NULL;
 	GetMovementComponent()->Velocity.Y > 0 ? TotalDistanceTraveled += GetMovementComponent()->Velocity.Y * DeltaSeconds : NULL;
 	GetMovementComponent()->Velocity.Z > 0 ? TotalDistanceTraveled += GetMovementComponent()->Velocity.Z * DeltaSeconds : NULL;
@@ -64,7 +63,8 @@ void ARunnerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName = GetName(); // Set character name, to allow check other comp does they collised with your hero
+	// Set character name, to allow check other comp does they collised with your hero
+	Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName = GetName(); 
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -130,11 +130,13 @@ void ARunnerCharacter::TurnARunner(float Value)
 
 }
 
+// Return traveled distance in meters
 int32 ARunnerCharacter::GetTotalDistanceTraveled()
 {
 	return (int32)TotalDistanceTraveled / 1000;
 }
 
+// Calculate for projectile motion math. 
 float ARunnerCharacter::GetV0Velocity()
 {
 	return FMath::Sqrt(
@@ -142,11 +144,13 @@ float ARunnerCharacter::GetV0Velocity()
 	);
 }
 
+// Vy / V0
 float ARunnerCharacter::GetSin()
 {
 	return FMath::Sin(GetCharacterMovement()->JumpZVelocity / GetV0Velocity());
 }
 
+// Vx / V0
 float ARunnerCharacter::GetCos()
 {
 	return FMath::Sin(GetCharacterMovement()->MaxWalkSpeed / GetV0Velocity());

@@ -35,9 +35,11 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	// Return traveled distance in meter
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	int32 GetTotalDistanceTraveled();
 
+	// Call to this, if you want to change hero director
 	UFUNCTION(BlueprintCallable)
 	void TurnARunner(float Value);
 

@@ -28,7 +28,7 @@ void AMapSpawner::BeginPlay()
 	auto ToShow = PreviousCorridor->GetActorRotation();
 	UE_LOG(LogTemp, Warning, TEXT("%s dsadsadas"), *ToShow.ToString());
 
-	GetWorld()->GetTimerManager().SetTimer(hTimer, this, &AMapSpawner::GenerateMap, 1.0f, true);
+	GetWorld()->GetTimerManager().SetTimer(hTimer, this, &AMapSpawner::GenerateMap, .5f, true);
 }
 
 void AMapSpawner::GenerateMap()

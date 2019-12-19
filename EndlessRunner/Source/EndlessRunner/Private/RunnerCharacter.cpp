@@ -116,6 +116,7 @@ void ARunnerCharacter::MoveRight(float Value)
 	}
 }
 
+// Change a runner directory while he is running. Using only if you make an turn.
 void ARunnerCharacter::TurnARunner(float Value)
 {
 	const FRotator Rotation = Controller->GetControlRotation();

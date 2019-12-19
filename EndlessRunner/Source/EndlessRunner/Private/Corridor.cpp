@@ -20,7 +20,8 @@ ACorridor::ACorridor()
 	CorridorMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Corridor"));
 	SetRootComponent(CorridorMesh);
 	
-	//CreateCollisionBox();
+	TriggerDestroy = CreateDefaultSubobject<UBoxComponent>(FName("Box Component"));
+	TriggerDestroy->AttachTo(CorridorMesh);
 
 }
 
@@ -28,7 +29,7 @@ ACorridor::ACorridor()
 void ACorridor::BeginPlay()
 {
 	Super::BeginPlay();
-	//CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ACorridor::OnOverlapBegin);
+	TriggerDestroy->OnComponentBeginOverlap.AddDynamic(this, &ACorridor::OnOverlapBegin);
 
 	//SpawnCoin();
 }
@@ -47,19 +48,11 @@ void ACorridor::SpawnCoin()
 		);
 }
 
-void ACorridor::CreateCollisionBox()
-{
-	CollisionBox = CreateDefaultSubobject<UBoxComponent>(FName("Box Component"));
-	CollisionBox->AttachTo(CorridorMesh);
-	CollisionBox->SetRelativeLocation(FVector(-89.0f, 0.0f, 70.0f));
-	CollisionBox->SetRelativeScale3D(FVector(1.0f, 8.5f, 1.0f));
-}
-
 void ACorridor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (!Cast<UMyGameInstance>(GetGameInstance())) { return; }
 	if (OtherActor->GetName() == Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName)
 	{
-
 		FTimerHandle TimeToDestroy;
 		GetWorldTimerManager().SetTimer(TimeToDestroy, this, &ACorridor::DestroyObject, 3.0f, false);
 	}
@@ -74,4 +67,3 @@ void ACorridor::DestroyObject()
 	}
 	Destroy();
 }
-

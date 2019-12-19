@@ -31,8 +31,6 @@ private:
 	UFUNCTION()
 	void GenerateMap();
 
-	void SpawnCorridor(TSubclassOf<ACorridor> CorridorToSpawn);
-
 	bool IsMapGenerated{ false }; // Map is generated when 100 corridors is created, after it create everything slowely
 	int32 SpawnedCorridors{ 0 };
 
@@ -43,17 +41,17 @@ private:
 	bool CanTurnRight{ true };
 
 	// In percent, it determines chance to make a space between next corridor, which mean that a player have to jump over it.
-	UPROPERTY(EditDefaultsOnly, Category = "Chances setup")
+	UPROPERTY(EditAnywhere, Category = "Chances setup")
 	int32 ChanceToGreaterDistance{ 25 };
 
 	// If yes, map will spawn next corridor over an previous corridor
-	UPROPERTY(EditDefaultsOnly, Category = "Chances setup")
+	UPROPERTY(EditAnywhere, Category = "Chances setup")
 	int32 ChanceToJump{ 10 };
 
-	UPROPERTY(EditDefaultsOnly, Category = "Chances setup")
+	UPROPERTY(EditAnywhere, Category = "Chances setup")
 	int32 ChanceToTurnLeft{ 10 };
 
-	UPROPERTY(EditDefaultsOnly, Category = "Chances setup")
+	UPROPERTY(EditAnywhere, Category = "Chances setup")
 	int32 ChanceToTurnRight{ 10 };
 	// A function which will check and make random function.
 	bool RandomGenerator(int Chance);

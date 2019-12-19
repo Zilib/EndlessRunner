@@ -20,12 +20,12 @@ public:
 	ACorridor();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	UBoxComponent* CollisionBox{ nullptr };
+	UBoxComponent* TriggerDestroy{ nullptr };
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* CorridorMesh{ nullptr };
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<FName> SpawnPointNames; // Array of rows and cols
 protected:
 	// Called when the game starts or when spawned
@@ -35,13 +35,13 @@ protected:
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 private:
-	void CreateCollisionBox();
-
 	// After begin overlap wait 3 second and destroy this element. 
 	void DestroyObject();
 
+	// Every will destroy after 1 sec of begin overlap. It handle time of it
 	FTimerHandle Handler;
 
+	// Collecting system, spwan coins
 	void SpawnCoin();
 
 	UPROPERTY(EditAnywhere)

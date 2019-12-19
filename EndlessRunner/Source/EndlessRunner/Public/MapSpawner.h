@@ -11,6 +11,7 @@
 
 class AStaticMeshActor;
 class ACorridor;
+class ARunnerCharacter;
 
 UCLASS()
 class ENDLESSRUNNER_API AMapSpawner : public AActor
@@ -22,6 +23,10 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	// Need for calculate maximum jump distance and height. For estimate an obscales difficulty level
+	UPROPERTY(EditAnywhere)
+	ARunnerCharacter* RunnerHero{ nullptr };
+
 	// Here i will hold a new object, for get next spawn location.
 	// Firstly you need to give me a first object, because i do not know where should i spawn next object
 	// Basicly it would be a start platform.
@@ -32,8 +37,8 @@ private:
 	void GenerateMap();
 
 	bool IsMapGenerated{ false }; // Map is generated when 100 corridors is created, after it create everything slowely
-	int32 SpawnedCorridors{ 0 };
 
+	// Keep time between spawning corridors.
 	FTimerHandle hTimer;
 
 	// Try to avoid sytuation where corridors will make a square, it will never can make twice this same kind of turn corridor.
@@ -53,8 +58,11 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Chances setup")
 	int32 ChanceToTurnRight{ 10 };
+
 	// A function which will check and make random function.
 	bool RandomGenerator(int Chance);
+
+	float DistanceObstacle();
 public:	
 	// Sets default values for this actor's properties
 	AMapSpawner();

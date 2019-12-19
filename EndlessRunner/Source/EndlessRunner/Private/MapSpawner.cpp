@@ -7,6 +7,8 @@
 #include "TimerManager.h"
 #include "Math/UnrealMathUtility.h"
 #include "GameFramework/Actor.h"
+#include "Kismet/GameplayStatics.h"
+#include "RunnerCharacter.h"
 #include "Engine/StaticMesh.h"
 
 // Sets default values
@@ -26,13 +28,26 @@ void AMapSpawner::BeginPlay()
 	if (Corridors.Num() == 0) { return;  }
 
 	auto ToShow = PreviousCorridor->GetActorRotation();
-	UE_LOG(LogTemp, Warning, TEXT("%s dsadsadas"), *ToShow.ToString());
 
 	GetWorld()->GetTimerManager().SetTimer(hTimer, this, &AMapSpawner::GenerateMap, .5f, true);
 }
 
+float AMapSpawner::DistanceObstacle()
+{
+	if (!ensure(RunnerHero)) { return 0; }
+	float V0 = RunnerHero->GetV0Velocity();
+	// Only add x distance
+	// Calculate projectile motion
+	// Calculate time to reach ground
+	float Td = (2 * V0 * RunnerHero->GetSin()) / 980;
+	// Calculate from the horizontal displacement the maximum distance of projectile
+	float d = V0 * Td * RunnerHero->GetCos();
+	return d;
+}
+
 void AMapSpawner::GenerateMap()
 {
+	FTransform SpawnPointTransform;
 	TSubclassOf<ACorridor> CorridorToSpawn = NULL;
 	// Spawn turn left corridor
 	if (RandomGenerator(ChanceToTurnLeft) && CanTurnLeft == true)
@@ -43,12 +58,7 @@ void AMapSpawner::GenerateMap()
 		CorridorToSpawn = *Corridors.Find(FName("Turn Left"));
 
 		// Get position where should be spawned corridor
-		FTransform SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform("SpawnPointTurnLeft");
-
-		PreviousCorridor = GetWorld()->SpawnActor<ACorridor>(
-			CorridorToSpawn,
-			SpawnPointTransform
-			);
+		SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform("SpawnPointTurnLeft");
 	}
 	else if (RandomGenerator(ChanceToTurnRight) && CanTurnRight == true)
 	{
@@ -58,12 +68,7 @@ void AMapSpawner::GenerateMap()
 		CorridorToSpawn = *Corridors.Find(FName("Turn Right"));
 
 		// Get position where should be spawned corridor
-		FTransform SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform("SpawnPointTurnRight");
-
-		PreviousCorridor = GetWorld()->SpawnActor<ACorridor>(
-			CorridorToSpawn,
-			SpawnPointTransform
-			);
+		SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform("SpawnPointTurnRight");
 	}
 	else
 	{
@@ -73,21 +78,34 @@ void AMapSpawner::GenerateMap()
 		CorridorToSpawn = *Corridors.Find(FName("Straight"));
 
 		// Get position where should be spawned corridor
-		FTransform SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform("SpawnPointStraight");
-
-		PreviousCorridor = GetWorld()->SpawnActor<ACorridor>(
-			CorridorToSpawn,
-			SpawnPointTransform
-			);
+		 SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform("SpawnPointStraight");
 	}
+	// If distance hit a good percent, spawn it in another distance
+	if (RandomGenerator(ChanceToGreaterDistance))
+	{
+		FVector NewLocation = FVector(
+			SpawnPointTransform.GetLocation().X + (FMath::Abs(SpawnPointTransform.GetRotation().GetForwardVector().X) * DistanceObstacle()),
+			SpawnPointTransform.GetLocation().Y + (FMath::Abs(SpawnPointTransform.GetRotation().GetRightVector().X) * DistanceObstacle()),
+			SpawnPointTransform.GetLocation().Z
+		);
+		SpawnPointTransform = FTransform(
+			SpawnPointTransform.GetRotation(),
+			NewLocation,
+			SpawnPointTransform.GetScale3D()
+		);
+	}
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *SpawnPointTransform.GetRotation().GetForwardVector().ToString());
+	PreviousCorridor = GetWorld()->SpawnActor<ACorridor>(
+		CorridorToSpawn,
+		SpawnPointTransform
+		);
 }
 
 // Random system, to make some obstacles.
 bool AMapSpawner::RandomGenerator(int Chance)
 {
-	int32 RandomNumber = FMath::FRandRange(1, 100);
-
-	return RandomNumber < Chance;
+	int32 HitNumber = FMath::FRandRange(1, 100);
+	return HitNumber <= Chance;
 }
 
 // Called every frame

@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "MyGameInstance.h"
 #include "Engine/GameInstance.h" 
+#include "Math/UnrealMathUtility.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 
@@ -132,4 +133,21 @@ void ARunnerCharacter::TurnARunner(float Value)
 int32 ARunnerCharacter::GetTotalDistanceTraveled()
 {
 	return (int32)TotalDistanceTraveled / 1000;
+}
+
+float ARunnerCharacter::GetV0Velocity()
+{
+	return FMath::Sqrt(
+		FMath::Pow(GetCharacterMovement()->JumpZVelocity, 2) + FMath::Pow(GetCharacterMovement()->MaxWalkSpeed, 2)
+	);
+}
+
+float ARunnerCharacter::GetSin()
+{
+	return FMath::Sin(GetCharacterMovement()->JumpZVelocity / GetV0Velocity());
+}
+
+float ARunnerCharacter::GetCos()
+{
+	return FMath::Sin(GetCharacterMovement()->MaxWalkSpeed / GetV0Velocity());
 }

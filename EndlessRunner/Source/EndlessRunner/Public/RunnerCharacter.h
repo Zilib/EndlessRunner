@@ -14,16 +14,15 @@ class ENDLESSRUNNER_API ARunnerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-		/** Camera boom positioning the camera behind the character */
-		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class USpringArmComponent* CameraBoom;
+	/** Camera boom positioning the camera behind the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class USpringArmComponent* CameraBoom;
 
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class UCameraComponent* FollowCamera;
+	class UCameraComponent* FollowCamera;
 public:
 	ARunnerCharacter();
-
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseTurnRate;
@@ -41,6 +40,18 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void TurnARunner(float Value);
+
+	// Return from pitagoras an C of triangle. 
+	UFUNCTION()
+	float GetV0Velocity();
+
+	// Retrun sinus of V0 and Vy 
+	UFUNCTION()
+	float GetSin();
+
+	// Return cosinus of V0 an Vx
+	UFUNCTION()
+	float GetCos();
 protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
@@ -60,9 +71,7 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	// It will be showed at screen, as score.
 	float TotalDistanceTraveled{ 0.0f };
 
-	FTimerHandle RotateRunner;
-
-	float RotatePerMiliSecond;
 };

@@ -48,4 +48,5 @@ private:
 	TSubclassOf<ACoin> CoinToSpawn;
 
 	ACoin* SpawnedCoin;
+
 };

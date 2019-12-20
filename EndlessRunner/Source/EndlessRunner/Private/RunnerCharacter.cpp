@@ -155,3 +155,15 @@ float ARunnerCharacter::GetCos() const
 {
 	return FMath::Sin(GetCharacterMovement()->MaxWalkSpeed / GetV0Velocity());
 }
+
+// Return max jump height
+float ARunnerCharacter::GetMaxJumpHeight() const
+{
+	return GetCharacterMovement()->GetMaxJumpHeight();
+}
+
+// Return time to reach max jump height
+float ARunnerCharacter::TimeToReachMaximumHeight() const
+{
+	return (GetV0Velocity() * GetSin()) / GetWorld()->GetGravityZ();
+}

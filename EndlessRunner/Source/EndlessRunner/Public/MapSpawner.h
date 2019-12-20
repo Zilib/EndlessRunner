@@ -67,6 +67,10 @@ private:
 
 	// return how much a next corridor should be far from this object.
 	float DistanceObstacle() const;
+
+	// Return total jump time
+	float TotalFlightTime() const;
+
 public:	
 	// Sets default values for this actor's properties
 	AMapSpawner();

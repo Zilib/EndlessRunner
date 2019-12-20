@@ -35,6 +35,8 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	/// Getters
+
 	// Return traveled distance in meter
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	int32 GetTotalDistanceTraveled() const;
@@ -43,17 +45,20 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void TurnARunner(float Value);
 
-	// Return from pitagoras an C of triangle. 
-	UFUNCTION()
-	float GetV0Velocity() const;
+	 // Return from pitagoras sqrt(pow(Vx,2) + pow(Vy,2))
+	float GetV0Velocity() const; 
 
 	// Retrun sinus of V0 and Vy 
-	UFUNCTION()
-	float GetSin() const;
+	float GetSin() const; 
 
-	// Return cosinus of V0 an Vx
-	UFUNCTION()
+	// Return cosinus of V0 and Vx
 	float GetCos() const;
+
+	// Return max jump height
+	float GetMaxJumpHeight() const;
+
+	// Return time to reach maximum height
+	float TimeToReachMaximumHeight() const;
 protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
@@ -71,9 +76,7 @@ protected:
 	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void BeginPlay() override;
-
 private:
 	// It will be showed at screen, as score.
 	float TotalDistanceTraveled{ 0.0f };
-
 };

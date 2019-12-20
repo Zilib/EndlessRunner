@@ -57,7 +57,17 @@ void AMapSpawner::GenerateMap()
 		CorridorToSpawn = *Corridors.Find(FName("Turn Left"));
 
 		// Get position where should be spawned corridor
-		SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform("SpawnPointTurnLeft");
+		SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPointTurnLeft"));
+
+		if (RandomGenerator(ChanceToGreaterDistance))
+		{
+			/// Make distance greater
+			FVector SocketLocation = SpawnPointTransform.GetLocation();
+			FVector SocketRotation = SpawnPointTransform.GetRotation().GetForwardVector() * -DistanceObstacle();
+			SpawnPointTransform.SetLocation(SocketLocation + SocketRotation);
+			//SpawnPointTransform.AddToTranslation(FVector(-DistanceObstacle(), 0, 0));
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *SpawnPointTransform.ToString());
+		}
 	}
 	else if (RandomGenerator(ChanceToTurnRight) && CanTurnRight == true)
 	{
@@ -67,33 +77,38 @@ void AMapSpawner::GenerateMap()
 		CorridorToSpawn = *Corridors.Find(FName("Turn Right"));
 
 		// Get position where should be spawned corridor
-		SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform("SpawnPointTurnRight");
+		SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPointTurnRight"));
+
+		if (RandomGenerator(ChanceToGreaterDistance))
+		{
+			/// Make distance greater
+			FVector SocketLocation = SpawnPointTransform.GetLocation();
+			FVector SocketRotation = SpawnPointTransform.GetRotation().GetRightVector() * DistanceObstacle();
+			SpawnPointTransform.SetLocation(SocketLocation + SocketRotation);
+			//SpawnPointTransform.AddToTranslation(FVector(-DistanceObstacle(), 0, 0));
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *SpawnPointTransform.ToString());
+		}
 	}
 	else
 	{
-		CanTurnLeft = true;
-		CanTurnLeft = true;
 
 		CorridorToSpawn = *Corridors.Find(FName("Straight"));
+		SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPointStraight"));
 
 		// Get position where should be spawned corridor
-		 SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform("SpawnPointStraight");
+		if (RandomGenerator(ChanceToGreaterDistance))
+		{
+		/// Make distance greater
+			FVector SocketLocation = SpawnPointTransform.GetLocation();
+			FVector SocketRotation = SpawnPointTransform.GetRotation().GetForwardVector() * -DistanceObstacle();
+			SpawnPointTransform.SetLocation(SocketLocation + SocketRotation);
+			//SpawnPointTransform.AddToTranslation(FVector(-DistanceObstacle(), 0, 0));
+
+		}
+		 
 	}
-	// If distance hit a good percent, spawn it in another distance
-	if (RandomGenerator(ChanceToGreaterDistance))
-	{
-		FVector NewLocation = FVector(
-			SpawnPointTransform.GetLocation().X + (FMath::Abs(SpawnPointTransform.GetRotation().GetForwardVector().X) * DistanceObstacle()),
-			SpawnPointTransform.GetLocation().Y + (FMath::Abs(SpawnPointTransform.GetRotation().GetRightVector().X) * DistanceObstacle()),
-			SpawnPointTransform.GetLocation().Z
-		);
-		SpawnPointTransform = FTransform(
-			SpawnPointTransform.GetRotation(),
-			NewLocation,
-			SpawnPointTransform.GetScale3D()
-		);
-	}
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *SpawnPointTransform.GetRotation().GetForwardVector().ToString());
+
+
 	PreviousCorridor = GetWorld()->SpawnActor<ACorridor>(
 		CorridorToSpawn,
 		SpawnPointTransform

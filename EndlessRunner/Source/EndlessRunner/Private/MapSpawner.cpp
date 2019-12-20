@@ -27,7 +27,7 @@ void AMapSpawner::BeginPlay()
 	if (!ensure(PreviousCorridor)) { return; }
 	if (Corridors.Num() == 0) { return;  } 
 
-	GetWorld()->GetTimerManager().SetTimer(hTimer, this, &AMapSpawner::GenerateMap, .5f, true);
+	GetWorld()->GetTimerManager().SetTimer(hTimer, this, &AMapSpawner::GenerateMap, .1f, true);
 }
 
 // Calculate total jump flight time.
@@ -45,8 +45,11 @@ float AMapSpawner::DistanceObstacle() const
 	const float Td = TotalFlightTime();
 	const float V0 = RunnerHero->GetV0Velocity();
 
+
 	// Calculate from the horizontal displacement the maximum distance of projectile
-	float d = V0 * Td * RunnerHero->GetCos();
+	float d = V0 * Td * RunnerHero->GetSin();
+
+	UE_LOG(LogTemp, Warning, TEXT("%f "),RunnerHero->GetSin());
 
 	return d;
 }
@@ -76,7 +79,7 @@ void AMapSpawner::GenerateMap()
 
 				FVector SocketLocation = SpawnPointTransform.GetLocation();
 				FVector SocketRotationForward = SpawnPointTransform.GetRotation().GetForwardVector() * DistanceToReachMaxHeight;
-				FVector SocketRotationUp = SpawnPointTransform.GetRotation().GetUpVector() * (RunnerHero->GetMaxJumpHeight() + 30);
+				FVector SocketRotationUp = SpawnPointTransform.GetRotation().GetUpVector() * (RunnerHero->GetMaxJumpHeight());
 
 				SpawnPointTransform.SetLocation(SocketLocation + SocketRotationForward + SocketRotationUp);
 			}
@@ -109,7 +112,7 @@ void AMapSpawner::GenerateMap()
 
 				FVector SocketLocation = SpawnPointTransform.GetLocation();
 				FVector SocketRotationForward = SpawnPointTransform.GetRotation().GetRightVector() * -DistanceToReachMaxHeight;
-				FVector SocketRotationUp = SpawnPointTransform.GetRotation().GetUpVector() * (RunnerHero->GetMaxJumpHeight() + 30);
+				FVector SocketRotationUp = SpawnPointTransform.GetRotation().GetUpVector() * (RunnerHero->GetMaxJumpHeight());
 
 				SpawnPointTransform.SetLocation(SocketLocation + SocketRotationForward + SocketRotationUp);
 			}
@@ -138,7 +141,7 @@ void AMapSpawner::GenerateMap()
 
 				FVector SocketLocation = SpawnPointTransform.GetLocation();
 				FVector SocketRotationForward = SpawnPointTransform.GetRotation().GetForwardVector() * DistanceToReachMaxHeight;
-				FVector SocketRotationUp = SpawnPointTransform.GetRotation().GetUpVector() * (RunnerHero->GetMaxJumpHeight() + 30);
+				FVector SocketRotationUp = SpawnPointTransform.GetRotation().GetUpVector() * (RunnerHero->GetMaxJumpHeight());
 
 				SpawnPointTransform.SetLocation(SocketLocation + SocketRotationForward + SocketRotationUp);
 			}
@@ -146,7 +149,7 @@ void AMapSpawner::GenerateMap()
 			{
 				/// Make distance greater
 				FVector SocketLocation = SpawnPointTransform.GetLocation();
-				FVector SocketRotationForward = SpawnPointTransform.GetRotation().GetForwardVector() * -DistanceObstacle();
+				FVector SocketRotationForward = SpawnPointTransform.GetRotation().GetForwardVector() * -(DistanceObstacle() - 250);
 				SpawnPointTransform.SetLocation(SocketLocation + SocketRotationForward);
 			}
 			//SpawnPointTransform.AddToTranslation(FVector(-DistanceObstacle(), 0, 0));

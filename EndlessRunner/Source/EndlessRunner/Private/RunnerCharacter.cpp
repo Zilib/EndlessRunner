@@ -147,13 +147,13 @@ float ARunnerCharacter::GetV0Velocity() const
 // Return an sinus of JumpZ velocity and V0(Vy and V0). Necessary for projectile motion
 float ARunnerCharacter::GetSin() const
 {
-	return FMath::Sin(GetCharacterMovement()->JumpZVelocity / GetV0Velocity());
+	return GetCharacterMovement()->JumpZVelocity / GetV0Velocity();
 }
 
 // Return an cosinus of MaxWalkSpeed velocity and V0(Vx and V0). Necessary for projectile motion
 float ARunnerCharacter::GetCos() const
 {
-	return FMath::Sin(GetCharacterMovement()->MaxWalkSpeed / GetV0Velocity());
+	return GetCharacterMovement()->MaxWalkSpeed / GetV0Velocity();
 }
 
 // Return max jump height

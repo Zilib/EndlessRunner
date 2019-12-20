@@ -37,7 +37,7 @@ public:
 
 	// Return traveled distance in meter
 	UFUNCTION(BlueprintCallable, Category = "Score")
-	int32 GetTotalDistanceTraveled();
+	int32 GetTotalDistanceTraveled() const;
 
 	// Call to this, if you want to change hero director
 	UFUNCTION(BlueprintCallable)
@@ -45,15 +45,15 @@ public:
 
 	// Return from pitagoras an C of triangle. 
 	UFUNCTION()
-	float GetV0Velocity();
+	float GetV0Velocity() const;
 
 	// Retrun sinus of V0 and Vy 
 	UFUNCTION()
-	float GetSin();
+	float GetSin() const;
 
 	// Return cosinus of V0 an Vx
 	UFUNCTION()
-	float GetCos();
+	float GetCos() const;
 protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);

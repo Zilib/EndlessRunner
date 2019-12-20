@@ -131,27 +131,27 @@ void ARunnerCharacter::TurnARunner(float Value)
 }
 
 // Return traveled distance in meters
-int32 ARunnerCharacter::GetTotalDistanceTraveled()
+int32 ARunnerCharacter::GetTotalDistanceTraveled() const
 {
 	return (int32)TotalDistanceTraveled / 1000;
 }
 
-// Calculate for projectile motion math. 
-float ARunnerCharacter::GetV0Velocity()
+// Return an V0 velocity, it is necessary for calculate projectile motion
+float ARunnerCharacter::GetV0Velocity() const
 {
 	return FMath::Sqrt(
 		FMath::Pow(GetCharacterMovement()->JumpZVelocity, 2) + FMath::Pow(GetCharacterMovement()->MaxWalkSpeed, 2)
 	);
 }
 
-// Vy / V0
-float ARunnerCharacter::GetSin()
+// Return an sinus of JumpZ velocity and V0(Vy and V0). Necessary for projectile motion
+float ARunnerCharacter::GetSin() const
 {
 	return FMath::Sin(GetCharacterMovement()->JumpZVelocity / GetV0Velocity());
 }
 
-// Vx / V0
-float ARunnerCharacter::GetCos()
+// Return an cosinus of MaxWalkSpeed velocity and V0(Vx and V0). Necessary for projectile motion
+float ARunnerCharacter::GetCos() const
 {
 	return FMath::Sin(GetCharacterMovement()->MaxWalkSpeed / GetV0Velocity());
 }

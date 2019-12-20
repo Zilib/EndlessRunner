@@ -31,14 +31,14 @@ void AMapSpawner::BeginPlay()
 }
 
 // Calculate difference in X forward vector
-float AMapSpawner::DistanceObstacle()
+float AMapSpawner::DistanceObstacle() const
 {
 	if (!ensure(RunnerHero)) { return 0; }
 	float V0 = RunnerHero->GetV0Velocity();
 	// Only add x distance
 	// Calculate projectile motion
 	// Calculate time to reach ground
-	float Td = (2 * V0 * RunnerHero->GetSin()) / 980;
+	float Td = (2 * V0 * RunnerHero->GetSin()) / GetWorld()->GetGravityZ()* -1;
 	// Calculate from the horizontal displacement the maximum distance of projectile
 	float d = V0 * Td * RunnerHero->GetCos();
 	return d;

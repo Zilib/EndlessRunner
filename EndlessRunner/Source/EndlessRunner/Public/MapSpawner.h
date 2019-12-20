@@ -45,24 +45,28 @@ private:
 	bool CanTurnLeft{ true };
 	bool CanTurnRight{ true };
 
+	/// Randomize map
 	// In percent, it determines chance to make a space between next corridor, which mean that a player have to jump over it.
 	UPROPERTY(EditAnywhere, Category = "Chances setup")
 	int32 ChanceToGreaterDistance{ 25 };
 
-	// If yes, map will spawn next corridor over an previous corridor
+	// It will only possibile if GreaterDistanceHit, chance to spawn it at max high distance
 	UPROPERTY(EditAnywhere, Category = "Chances setup")
 	int32 ChanceToJump{ 10 };
 
+	// Chance to spawn turn left corridor
 	UPROPERTY(EditAnywhere, Category = "Chances setup")
 	int32 ChanceToTurnLeft{ 10 };
 
+	// Chance to spawn turn right corridor
 	UPROPERTY(EditAnywhere, Category = "Chances setup")
 	int32 ChanceToTurnRight{ 10 };
 
 	// A function which will check and make random function.
 	bool RandomGenerator(int Chance);
 
-	float DistanceObstacle();
+	// return how much a next corridor should be far from this object.
+	float DistanceObstacle() const;
 public:	
 	// Sets default values for this actor's properties
 	AMapSpawner();

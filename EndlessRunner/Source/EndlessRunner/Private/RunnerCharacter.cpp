@@ -8,23 +8,12 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "MyGameInstance.h"
 #include "Math/UnrealMathUtility.h"
+#include "Math/Vector.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AEndlessRunnerCharacter
-void ARunnerCharacter::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-
-	MoveForward(1);
-
-	// Increase traveled distance 
-	GetMovementComponent()->Velocity.X > 0 ? TotalDistanceTraveled += GetMovementComponent()->Velocity.X * DeltaSeconds : NULL;
-	GetMovementComponent()->Velocity.Y > 0 ? TotalDistanceTraveled += GetMovementComponent()->Velocity.Y * DeltaSeconds : NULL;
-	GetMovementComponent()->Velocity.Z > 0 ? TotalDistanceTraveled += GetMovementComponent()->Velocity.Z * DeltaSeconds : NULL;
-
-}
 
 ARunnerCharacter::ARunnerCharacter()
 {
@@ -65,6 +54,19 @@ void ARunnerCharacter::BeginPlay()
 
 	// Set character name, to allow check other comp does they collised with your hero
 	Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName = GetName(); 
+
+}
+
+void ARunnerCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	MoveForward(1);
+
+	// Increase traveled distance 
+	TotalDistanceTraveled += FVector::DotProduct(GetVelocity(), GetActorRotation().Vector()) / 100;
+
+
 }
 
 //////////////////////////////////////////////////////////////////////////

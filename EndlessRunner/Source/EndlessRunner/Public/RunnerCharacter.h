@@ -36,7 +36,6 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	/// Getters
-
 	// Return traveled distance in meter
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	int32 GetTotalDistanceTraveled() const;
@@ -79,4 +78,6 @@ protected:
 private:
 	// It will be showed at screen, as score.
 	float TotalDistanceTraveled{ 0.0f };
+
+	FVector LastRecordedLocation;
 };

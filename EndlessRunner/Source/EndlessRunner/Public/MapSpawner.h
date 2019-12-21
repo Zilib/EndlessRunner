@@ -23,6 +23,8 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	int32 SpawnedCorridors{ 0 };
+
 	// Need for calculate maximum jump distance and height. For estimate an obscales difficulty level
 	UPROPERTY(EditAnywhere)
 	ARunnerCharacter* RunnerHero{ nullptr };
@@ -70,7 +72,6 @@ private:
 
 	// Return total jump time
 	float TotalFlightTime() const;
-
 public:	
 	// Sets default values for this actor's properties
 	AMapSpawner();

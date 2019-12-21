@@ -45,7 +45,6 @@ ARunnerCharacter::ARunnerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
 }
 
 void ARunnerCharacter::BeginPlay()
@@ -53,8 +52,7 @@ void ARunnerCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	// Set character name, to allow check other comp does they collised with your hero
-	Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName = GetName(); 
-
+	Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName = GetName();
 }
 
 void ARunnerCharacter::Tick(float DeltaSeconds)
@@ -62,11 +60,8 @@ void ARunnerCharacter::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 
 	MoveForward(1);
-
 	// Increase traveled distance 
 	TotalDistanceTraveled += FVector::DotProduct(GetVelocity(), GetActorRotation().Vector()) / 100;
-
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -80,7 +75,6 @@ void ARunnerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAxis("MoveRight", this, &ARunnerCharacter::MoveRight);
-
 }
 
 void ARunnerCharacter::TurnAtRate(float Rate)
@@ -100,7 +94,6 @@ void ARunnerCharacter::MoveForward(float Value)
 		// get forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(Direction, Value);
-
 	}
 }
 
@@ -114,6 +107,7 @@ void ARunnerCharacter::MoveRight(float Value)
 
 		// get right vector 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		UE_LOG(LogTemp, Warning, TEXT("%f"), Value);
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
@@ -129,7 +123,6 @@ void ARunnerCharacter::TurnARunner(float Value)
 		Rotation.Roll
 	);
 	Controller->SetControlRotation(NewRotation);
-
 }
 
 // Return traveled distance in meters

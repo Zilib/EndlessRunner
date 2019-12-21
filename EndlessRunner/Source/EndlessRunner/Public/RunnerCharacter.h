@@ -80,4 +80,5 @@ private:
 	float TotalDistanceTraveled{ 0.0f };
 
 	FVector LastRecordedLocation;
+
 };

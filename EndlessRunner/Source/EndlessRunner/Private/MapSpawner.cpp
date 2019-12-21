@@ -27,7 +27,7 @@ void AMapSpawner::BeginPlay()
 	if (!ensure(PreviousCorridor)) { return; }
 	if (Corridors.Num() == 0) { return;  } 
 
-	GetWorld()->GetTimerManager().SetTimer(hTimer, this, &AMapSpawner::GenerateMap, .1f, true);
+	GetWorld()->GetTimerManager().SetTimer(hTimer, this, &AMapSpawner::GenerateMap, .01f, true);
 }
 
 // Calculate total jump flight time.
@@ -45,21 +45,20 @@ float AMapSpawner::DistanceObstacle() const
 	const float Td = TotalFlightTime();
 	const float V0 = RunnerHero->GetV0Velocity();
 
-
 	// Calculate from the horizontal displacement the maximum distance of projectile
-	float d = V0 * Td * RunnerHero->GetSin();
+	float d = V0 * Td * RunnerHero->GetCos();
 
-	UE_LOG(LogTemp, Warning, TEXT("%f "),RunnerHero->GetSin());
-
-	return d;
+	return d - 300;
 }
 
 void AMapSpawner::GenerateMap()
 {
 	FTransform SpawnPointTransform;
 	TSubclassOf<ACorridor> CorridorToSpawn = NULL;
-	// Spawn turn left corridor
-	if (RandomGenerator(ChanceToTurnLeft) && CanTurnLeft == true)
+
+	// Spawn turn left corridor, let him take a good velocity.
+	if (RandomGenerator(ChanceToTurnLeft)
+		&& (CanTurnLeft == true))
 	{
 		// To avoid a collisions
 		CanTurnLeft = false;
@@ -70,7 +69,7 @@ void AMapSpawner::GenerateMap()
 		// Get position where should be spawned corridor
 		SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPointTurnLeft"));
 
-		if (RandomGenerator(ChanceToGreaterDistance))
+		if (RandomGenerator(ChanceToGreaterDistance) && SpawnedCorridors >= 2 )
 		{
 			if (RandomGenerator(ChanceToJump))
 			{
@@ -92,7 +91,8 @@ void AMapSpawner::GenerateMap()
 			}
 		}
 	}
-	else if (RandomGenerator(ChanceToTurnRight) && CanTurnRight == true)
+	else if (RandomGenerator(ChanceToTurnRight)
+		&& (CanTurnRight == true))
 	{
 		// To avoid a collisions
 		CanTurnRight = false;
@@ -103,7 +103,7 @@ void AMapSpawner::GenerateMap()
 		// Get position where should be spawned corridor
 		SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPointTurnRight"));
 
-		if (RandomGenerator(ChanceToGreaterDistance))
+		if (RandomGenerator(ChanceToGreaterDistance) && SpawnedCorridors >= 2)
 		{
 			if (RandomGenerator(ChanceToJump))
 			{
@@ -132,7 +132,7 @@ void AMapSpawner::GenerateMap()
 		SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPointStraight"));
 
 		// Get position where should be spawned corridor
-		if (RandomGenerator(ChanceToGreaterDistance))
+		if (RandomGenerator(ChanceToGreaterDistance) && SpawnedCorridors >= 2)
 		{
 			if (RandomGenerator(ChanceToJump))
 			{
@@ -149,16 +149,13 @@ void AMapSpawner::GenerateMap()
 			{
 				/// Make distance greater
 				FVector SocketLocation = SpawnPointTransform.GetLocation();
-				FVector SocketRotationForward = SpawnPointTransform.GetRotation().GetForwardVector() * -(DistanceObstacle() - 250);
+				FVector SocketRotationForward = SpawnPointTransform.GetRotation().GetForwardVector() * -(DistanceObstacle()); // TODO find an pattern for perfect distance depend of Vx 
 				SpawnPointTransform.SetLocation(SocketLocation + SocketRotationForward);
 			}
-			//SpawnPointTransform.AddToTranslation(FVector(-DistanceObstacle(), 0, 0));
-
 		}
-		 
 	}
 
-
+	SpawnedCorridors++;
 	PreviousCorridor = GetWorld()->SpawnActor<ACorridor>(
 		CorridorToSpawn,
 		SpawnPointTransform
@@ -177,5 +174,11 @@ void AMapSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Is spawned enought, player will not see spawning system, now let's protect his memory
+	if (SpawnedCorridors == 100)
+	{
+		//GetWorld()->GetTimerManager().ClearTimer(hTimer);
+		GetWorld()->GetTimerManager().SetTimer(hTimer, this, &AMapSpawner::GenerateMap, .1f, true);
+	}
 }
 

@@ -9,6 +9,7 @@
 #include "MyGameInstance.h"
 #include "Math/UnrealMathUtility.h"
 #include "Math/Vector.h"
+#include "Corridor.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 
@@ -101,13 +102,36 @@ void ARunnerCharacter::MoveRight(float Value)
 {
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
+		TArray<AActor*> Actors;
+		TSubclassOf<ACorridor> Corridors;
+		GetOverlappingActors(Actors, Corridors);
+		if (Actors.Num() > 0)
+		{
+			for (const auto& Actor : Actors)
+			{
+					ACorridor* qr = Cast<ACorridor>(Actor);
+					if (qr)
+					{
+						TSubclassOf<UBoxComponent> BoxC;
+						auto q = qr->GetComponents();
+						for (const auto& help : q)
+						{
+							auto CT = help->ComponentTags;
+							for (const auto& tag : CT)
+							{
+								UE_LOG(LogTemp, Warning, TEXT("%s"), *tag.ToString());
+							}
+						}
+					}
+			}
+
+		}
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
 		// get right vector 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		UE_LOG(LogTemp, Warning, TEXT("%f"), Value);
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}

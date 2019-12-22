@@ -28,7 +28,6 @@ void ACorridor::BeginPlay()
 	Super::BeginPlay();
 	TriggerDestroy->OnComponentBeginOverlap.AddDynamic(this, &ACorridor::OnOverlapBegin);
 
-	//SpawnCoin();
 }
 
 void ACorridor::SpawnCoin()

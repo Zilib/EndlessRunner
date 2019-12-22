@@ -8,6 +8,7 @@
 #include "Coin.h"
 #include "Corridor.generated.h"
 
+class AObstacle;
 
 UCLASS()
 class ENDLESSRUNNER_API ACorridor : public AActor
@@ -26,6 +27,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<FName> SpawnPointNames; // Array of names rows and cols
+
+	// Only keep for future destroy this object. Destroy it with corridor
+	AObstacle* SpawnedObstacleRock{ nullptr };
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

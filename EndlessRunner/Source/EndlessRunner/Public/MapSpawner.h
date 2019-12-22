@@ -12,6 +12,7 @@
 class AStaticMeshActor;
 class ACorridor;
 class ARunnerCharacter;
+class AObstacle;
 
 UCLASS()
 class ENDLESSRUNNER_API AMapSpawner : public AActor
@@ -72,6 +73,8 @@ private:
 
 	// Return total jump time
 	float TotalFlightTime() const;
+
+	void SpawnObstacleRock();
 public:	
 	// Sets default values for this actor's properties
 	AMapSpawner();
@@ -83,4 +86,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<FName,TSubclassOf<ACorridor>> Corridors;
 
+	// Give me here a blueprint of obstacle to spawn!
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AObstacle> ObstacleBP;
 };

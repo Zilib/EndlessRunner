@@ -8,6 +8,7 @@
 #include "Math/UnrealMathUtility.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/GameplayStatics.h"
+#include "Obstacle.h"
 #include "RunnerCharacter.h"
 #include "Engine/StaticMesh.h"
 
@@ -90,6 +91,11 @@ void AMapSpawner::GenerateMap()
 				SpawnPointTransform.SetLocation(SocketLocation + SocketRotation);
 			}
 		}
+		SpawnedCorridors++;
+		PreviousCorridor = GetWorld()->SpawnActor<ACorridor>(
+			CorridorToSpawn,
+			SpawnPointTransform
+			);
 	}
 	else if (RandomGenerator(ChanceToTurnRight)
 		&& (CanTurnRight == true))
@@ -125,6 +131,11 @@ void AMapSpawner::GenerateMap()
 				//SpawnPointTransform.AddToTranslation(FVector(-DistanceObstacle(), 0, 0));
 			}
 		}
+		SpawnedCorridors++;
+		PreviousCorridor = GetWorld()->SpawnActor<ACorridor>(
+			CorridorToSpawn,
+			SpawnPointTransform
+			);
 	}
 	else
 	{
@@ -153,13 +164,13 @@ void AMapSpawner::GenerateMap()
 				SpawnPointTransform.SetLocation(SocketLocation + SocketRotationForward);
 			}
 		}
+		SpawnedCorridors++;
+		PreviousCorridor = GetWorld()->SpawnActor<ACorridor>(
+			CorridorToSpawn,
+			SpawnPointTransform
+			);
+		SpawnObstacleRock();
 	}
-
-	SpawnedCorridors++;
-	PreviousCorridor = GetWorld()->SpawnActor<ACorridor>(
-		CorridorToSpawn,
-		SpawnPointTransform
-		);
 }
 
 // Random system, to make some obstacles.
@@ -182,3 +193,27 @@ void AMapSpawner::Tick(float DeltaTime)
 	}
 }
 
+// Only work with straight corridor
+void AMapSpawner::SpawnObstacleRock()
+{
+	int32 SpawnPointNumber = FMath::FRandRange(1, 4);
+	FTransform RockSpawnTransform;
+	// Spawn at left point
+	if (SpawnPointNumber == 1)
+	{
+		RockSpawnTransform = PreviousCorridor->CorridorMesh->GetSocketTransform(FName("SpawnObstacleLeft"));
+	}
+	else if (SpawnPointNumber == 2) 
+	{
+		 RockSpawnTransform = PreviousCorridor->CorridorMesh->GetSocketTransform(FName("SpawnObstacleCenter"));
+	} // Spawn at center
+	else if (SpawnPointNumber == 3)
+	{
+		RockSpawnTransform = PreviousCorridor->CorridorMesh->GetSocketTransform(FName("SpawnObstacleRight"));
+	} // Spawn at right
+
+	PreviousCorridor->SpawnedObstacleRock = GetWorld()->SpawnActor<AObstacle>(
+		ObstacleBP,
+		RockSpawnTransform
+	);
+}

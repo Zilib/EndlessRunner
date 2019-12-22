@@ -5,6 +5,7 @@
 #include "TimerManager.h"
 #include "MyGameInstance.h"
 #include "Coin.h"
+#include "Obstacle.h"
 #include "Engine/StaticMesh.h"
 
 // Sets default values
@@ -60,9 +61,9 @@ void ACorridor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Othe
 void ACorridor::DestroyObject()
 {
 	// if spawned coin exists, and you cannot collect it any more. Just destroy it
-	if (IsValid(SpawnedCoin))
+	if (IsValid(SpawnedObstacleRock))
 	{
-		SpawnedCoin->Destroy();
+		SpawnedObstacleRock->Destroy();
 	}
 	Destroy();
 }

@@ -98,34 +98,52 @@ void ARunnerCharacter::MoveForward(float Value)
 	}
 }
 
-void ARunnerCharacter::MoveRight(float Value)
+// Check does player can turn right, he cannot run into a wall
+bool ARunnerCharacter::CanMoveRight(float Value)
 {
-	if ((Controller != NULL) && (Value != 0.0f))
+	TArray<AActor*> Actors;
+	GetOverlappingActors(Actors, ACorridor::StaticClass());
+	if (Actors.Num() > 0)
 	{
-		TArray<AActor*> Actors;
-		TSubclassOf<ACorridor> Corridors;
-		GetOverlappingActors(Actors, Corridors);
-		if (Actors.Num() > 0)
+		for (const auto& Actor : Actors)
 		{
-			for (const auto& Actor : Actors)
+			// Corridor where actually player is.
+			ACorridor* pCurrentCorridor = Cast<ACorridor>(Actor);
+			if (pCurrentCorridor)
 			{
-					ACorridor* qr = Cast<ACorridor>(Actor);
-					if (qr)
+				// Get walls from corridor
+				TArray<UActorComponent*> Walls = pCurrentCorridor->GetComponentsByTag(UBoxComponent::StaticClass(), FName("Wall"));
+				if (Walls.Num() > 0)
+				{
+					for (const auto& Wall : Walls)
 					{
-						TSubclassOf<UBoxComponent> BoxC;
-						auto q = qr->GetComponents();
-						for (const auto& help : q)
+						UBoxComponent* WallComponent = Cast<UBoxComponent>(Wall);
+						// Check for direction
+						// If value > 0 runner is trying to turn right
+						if (Value > 0
+						&& WallComponent->ComponentHasTag(FName("RightWall")) // Get left wall component
+						&& WallComponent->IsOverlappingComponent(GetCapsuleComponent()) ) // If player is overlapping with it, forbid him turning
 						{
-							auto CT = help->ComponentTags;
-							for (const auto& tag : CT)
-							{
-								UE_LOG(LogTemp, Warning, TEXT("%s"), *tag.ToString());
-							}
+							return false;
+						}
+						else if (Value < 0 // If value is less than 0, runner is trying to go left
+						&& WallComponent->ComponentHasTag(FName("LeftWall")) // Get left wall component
+						&& WallComponent->IsOverlappingComponent(GetCapsuleComponent()) ) // If player is overlapping with it, forbid him turning
+						{
+							return false;
 						}
 					}
+				}
 			}
-
 		}
+
+	}
+	return true;
+}
+void ARunnerCharacter::MoveRight(float Value)
+{
+	if ((Controller != NULL) && (Value != 0.0f) && CanMoveRight(Value))
+	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);

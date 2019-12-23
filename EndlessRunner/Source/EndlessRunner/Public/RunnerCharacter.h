@@ -75,6 +75,8 @@ protected:
 	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void BeginPlay() override;
+
+	bool CanMoveRight(float Value);
 private:
 	// It will be showed at screen, as score.
 	float TotalDistanceTraveled{ 0.0f };

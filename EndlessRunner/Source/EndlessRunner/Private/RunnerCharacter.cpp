@@ -54,12 +54,15 @@ void ARunnerCharacter::BeginPlay()
 
 	// Set character name, to allow check other comp does they collised with your hero
 	Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName = GetName();
+
+	// Because game is not started, player cannot move
+	GetCharacterMovement()->SetActive(false);
 }
 
 void ARunnerCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
+	
 	MoveForward(1);
 	// Increase traveled distance 
 	TotalDistanceTraveled += FVector::DotProduct(GetVelocity(), GetActorRotation().Vector()) / 100;

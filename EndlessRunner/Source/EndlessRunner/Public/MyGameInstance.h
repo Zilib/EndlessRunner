@@ -24,4 +24,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	int32 CollectedItem{ 0 };
+
+	UPROPERTY(BlueprintReadWrite)
+	int32 LastTraveledDistance{ 0 };
 };

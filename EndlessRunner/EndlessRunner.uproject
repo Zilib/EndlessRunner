@@ -15,23 +15,7 @@
 	],
 	"Plugins": [
 		{
-			"Name": "ChaosNiagara",
-			"Enabled": true
-		},
-		{
-			"Name": "ChaosSolverPlugin",
-			"Enabled": true
-		},
-		{
-			"Name": "ChaosEditor",
-			"Enabled": true
-		},
-		{
 			"Name": "PlanarCut",
-			"Enabled": true
-		},
-		{
-			"Name": "GeometryCollectionPlugin",
 			"Enabled": true
 		},
 		{

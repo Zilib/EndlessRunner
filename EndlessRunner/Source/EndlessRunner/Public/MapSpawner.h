@@ -4,12 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "SpawnableCorridor.h"
 #include "Corridor.h"
 #include "TimerManager.h"
 #include "MapSpawner.generated.h"
 
-class AStaticMeshActor;
 class ACorridor;
 class ARunnerCharacter;
 class AObstacle;
@@ -82,6 +80,10 @@ private:
 	UPROPERTY(EditAnywhere, Category="Setup")
 	float NextDelay{ 0.5f }; // Next delay, after script spawn StartToSpawnCorridor value numbers of corridor.
 
+	UPROPERTY(EditAnywhere, Category= "Setup")
+	int32 WaitCorridors{ 3 }; // Don't spawn rocks before spawn X corridors
+
+	bool LastWasTurn{ false }; // Here is a variable which tell me does last corridor was a turn
 	bool NextDelayTimeActive{ false };
 	// Return total jump time
 	float TotalFlightTime() const;

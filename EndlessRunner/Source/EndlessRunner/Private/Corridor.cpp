@@ -18,7 +18,7 @@ ACorridor::ACorridor()
 	SetRootComponent(CorridorMesh);
 	
 	TriggerDestroy = CreateDefaultSubobject<UBoxComponent>(FName("Box Component"));
-	TriggerDestroy->AttachToComponent(CorridorMesh,FAttachmentTransformRules::KeepWorldTransform);
+	TriggerDestroy->AttachTo(CorridorMesh);
 }
 
 // Called when the game starts or when spawned

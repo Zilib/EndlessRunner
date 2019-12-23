@@ -17,7 +17,7 @@ AObstacle::AObstacle()
 	CapsuleCollision->SetRelativeLocation(FVector(0, 0, 100));
 	CapsuleCollision->SetCapsuleHalfHeight(170.0f);
 	CapsuleCollision->SetCapsuleRadius(130.0f);
-	CapsuleCollision->AttachToComponent(StaticMesh, FAttachmentTransformRules::KeepWorldTransform);
+	CapsuleCollision->AttachTo(StaticMesh);
 }
 
 // Called when the game starts or when spawned

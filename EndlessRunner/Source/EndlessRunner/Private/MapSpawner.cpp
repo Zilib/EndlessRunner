@@ -60,7 +60,10 @@ void AMapSpawner::SpawnStraightCorridor()
 	CorridorToSpawn = *Corridors.Find(FName("Straight"));
 	SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPointStraight"));
 	// Get position where should be spawned corridor
-	if (RandomGenerator(ChanceToGreaterDistance) && SpawnedCorridors >= 2)
+	if (RandomGenerator(ChanceToGreaterDistance) 
+		&& SpawnedCorridors >= 2
+		&& LastWasTurn == false // Do not displacement next object, because player don't have time to embrace it.
+		)
 	{
 		if (RandomGenerator(ChanceToJump))
 		{
@@ -81,9 +84,13 @@ void AMapSpawner::SpawnStraightCorridor()
 			SpawnPointTransform.SetLocation(SocketLocation + SocketRotationForward);
 		}
 	}
+	LastWasTurn = false;
 
 	SpawnCorridor();
-	SpawnObstacleRock();
+	if (SpawnedCorridors > WaitCorridors) // Wait after start game "Wait Corridors" corridors before start spawning rocks
+	{
+		SpawnObstacleRock();
+	}
 }
 
 void AMapSpawner::SpawnTurnRightCorridor()
@@ -97,7 +104,10 @@ void AMapSpawner::SpawnTurnRightCorridor()
 	// Get position where should be spawned corridor
 	SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPointTurnRight"));
 
-	if (RandomGenerator(ChanceToGreaterDistance) && SpawnedCorridors >= 2)
+	if (RandomGenerator(ChanceToGreaterDistance) 
+		&& SpawnedCorridors >= 2
+		&& LastWasTurn == false // Do not displacement next object, because player don't have time to embrace it.
+		)
 	{
 		if (RandomGenerator(ChanceToJump))
 		{
@@ -119,6 +129,7 @@ void AMapSpawner::SpawnTurnRightCorridor()
 			//SpawnPointTransform.AddToTranslation(FVector(-DistanceObstacle(), 0, 0));
 		}
 	}
+	LastWasTurn = true;
 	SpawnCorridor();
 }
 
@@ -133,7 +144,10 @@ void AMapSpawner::SpawnTurnLeftCorridor()
 	// Get position where should be spawned corridor
 	SpawnPointTransform = PreviousCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPointTurnLeft"));
 
-	if (RandomGenerator(ChanceToGreaterDistance) && SpawnedCorridors >= 2)
+	if (RandomGenerator(ChanceToGreaterDistance)
+		&& SpawnedCorridors >= 2
+		&& LastWasTurn == false // Do not displacement next object, because player don't have time to embrace it.
+		)
 	{
 		if (RandomGenerator(ChanceToJump))
 		{
@@ -155,6 +169,7 @@ void AMapSpawner::SpawnTurnLeftCorridor()
 		}
 	}
 	SpawnCorridor();
+	LastWasTurn = true;
 }
 ////////////////////////
 

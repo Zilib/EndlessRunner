@@ -101,15 +101,15 @@ void ARunnerCharacter::MoveForward(float Value)
 // Check does player can turn right, he cannot run into a wall
 bool ARunnerCharacter::CanMoveRight(float Value)
 {
-	TArray<AActor*> Actors;
+	TArray<AActor*> Actors; // Here is saved a overlapped actors
 	GetOverlappingActors(Actors, ACorridor::StaticClass());
-	if (Actors.Num() > 0)
+	if (Actors.Num() > 0) // If the array is empty, it means that mean runner does not overlap anything
 	{
-		for (const auto& Actor : Actors)
+		for (const auto& Actor : Actors) // For every overlaped  actor
 		{
 			// Corridor where actually player is.
-			ACorridor* pCurrentCorridor = Cast<ACorridor>(Actor);
-			if (pCurrentCorridor)
+			ACorridor* pCurrentCorridor = Cast<ACorridor>(Actor); // Get corridor
+			if (pCurrentCorridor) // If it is a corridor
 			{
 				// Get walls from corridor
 				TArray<UActorComponent*> Walls = pCurrentCorridor->GetComponentsByTag(UBoxComponent::StaticClass(), FName("Wall"));
@@ -140,6 +140,7 @@ bool ARunnerCharacter::CanMoveRight(float Value)
 	}
 	return true;
 }
+
 void ARunnerCharacter::MoveRight(float Value)
 {
 	if ((Controller != NULL) && (Value != 0.0f) && CanMoveRight(Value))

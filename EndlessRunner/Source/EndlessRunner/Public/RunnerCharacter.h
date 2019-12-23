@@ -76,7 +76,7 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	bool CanMoveRight(float Value);
+	bool CanMoveRight(float Value); // Forbid player move into a wall
 private:
 	// It will be showed at screen, as score.
 	float TotalDistanceTraveled{ 0.0f };

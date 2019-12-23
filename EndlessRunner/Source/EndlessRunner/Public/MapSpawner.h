@@ -68,13 +68,34 @@ private:
 	// A function which will check and make random function.
 	bool RandomGenerator(int Chance);
 
-	// return how much a next corridor should be far from this object.
-	float DistanceObstacle() const;
+	// Calculate where should be spawned next corridor, if runner have to jump
+	float GetDisplacement(float V0, float t, float Cos0) const;
 
+	float CorridorDisplacement;
+
+	UPROPERTY(EditAnywhere, Category = "Setup")
+	float DisplacementMarginValue{ 0 }; // How much cm corridor should be spawned before, it will make jump easier. 
+
+	UPROPERTY(EditAnywhere, Category = "Setup")
+	int32 StartToSpawnCorridor{ 20 }; // When map will spawned this number of corridors, game will change delay between spawn next corridor
+
+	UPROPERTY(EditAnywhere, Category="Setup")
+	float NextDelay{ 0.5f }; // Next delay, after script spawn StartToSpawnCorridor value numbers of corridor.
+
+	bool NextDelayTimeActive{ false };
 	// Return total jump time
 	float TotalFlightTime() const;
 
+	/// Spawn functions
+	void SpawnTurnRightCorridor();
+	void SpawnTurnLeftCorridor();
+	void SpawnStraightCorridor();
+	void SpawnCorridor(); // Common function, called from every previous functions to increase number of spawned corridors and to spawn corridor.
+	// Spawn rock
 	void SpawnObstacleRock();
+
+	FTransform SpawnPointTransform; // Next spawn point location
+	TSubclassOf<ACorridor> CorridorToSpawn = NULL; // Which kind of corridor will be spawned next
 public:	
 	// Sets default values for this actor's properties
 	AMapSpawner();

@@ -10,6 +10,5 @@ public class EndlessRunnerEditorTarget : TargetRules
 		Type = TargetType.Editor;
 		ExtraModuleNames.Add("EndlessRunner");
 
-        bCompileChaos = true;
 	}
 }

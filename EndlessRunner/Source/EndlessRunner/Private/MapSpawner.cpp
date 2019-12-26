@@ -23,7 +23,7 @@ AMapSpawner::AMapSpawner()
 void AMapSpawner::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	if (!ensure(PreviousCorridor)) { return; }
 	if (Corridors.Num() == 0) { return;  } 
 
@@ -175,6 +175,8 @@ void AMapSpawner::SpawnTurnLeftCorridor()
 
 void AMapSpawner::GenerateMap()
 {
+	if (RunnerHero->GetVelocity() == FVector(0,0,0)) { return; } // Spawn only player is moving. Don't spawn to much objects when it is not necessary
+
 	// Spawn turn left corridor, let him take a good velocity.
 	if (RandomGenerator(ChanceToTurnLeft)
 		&& (CanTurnLeft == true))

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "InterfaceStructs.h" 
 #include "MyGameInstance.generated.h"
 
 /**
@@ -15,16 +16,47 @@ class ENDLESSRUNNER_API UMyGameInstance : public UGameInstance
 	GENERATED_BODY()
 public:
 	// To check does overlap actor is main hero
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Setup")
 	FString RunnerBPName;
 
 	// Name which will be visible in UI
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Setup")
 	FString CollectingItemName{ "Bottle" };
 
-	UPROPERTY(BlueprintReadWrite)
-	int32 CollectedItem{ 0 };
+	UPROPERTY(BlueprintReadWrite, Category = "Game")
+	int32 CollectedItem{ 0 }; // When player get a item, collect it here!
 
-	UPROPERTY(BlueprintReadWrite)
-	int32 LastTraveledDistance{ 0 };
+	UPROPERTY(BlueprintReadWrite, Category = "Game")
+	int32 LastTraveledDistance{ 0 };  // When player is running he is making an distance! Save here his last done distance.
+
+
+/// Setters
+	// Save temporary player name to then save it to proper variable
+	UFUNCTION(BlueprintCallable, Category = "TData")
+	void SetPlayerName(FString PlayerName);
+
+	// Save temporary temporary meters to then save it to proper variable
+	UFUNCTION(BlueprintCallable, Category = "TData")
+	void SetTraveledMeters(FString TraveledMeters);
+
+	// Save temporary collected items to then save it to proper variable
+	UFUNCTION(BlueprintCallable, Category = "TData")
+	void SetCollectedItems(FString CollectedItems);
+
+	// Clear temporary array, it is a prepare before get a new data.
+	UFUNCTION(BlueprintCallable, Category = "TData")
+	void ClearTemporaryArray();
+
+	// Now save all data into a array
+	UFUNCTION(BlueprintCallable)
+	void AddToData();
+/// Getters 
+	// Get a copy of FScoreBoard table, to show it on the screen
+	UFUNCTION(BlueprintCallable, Category = "TData")
+	TArray<FScoreBoard> GetData();
+
+private:
+	FScoreBoard TemporaryData; // Save here data which will be saved into Data array
+
+	TArray<FScoreBoard> Data; 
 };

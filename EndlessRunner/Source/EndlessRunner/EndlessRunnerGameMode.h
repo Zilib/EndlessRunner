@@ -13,6 +13,7 @@ class AEndlessRunnerGameMode : public AGameModeBase
 
 public:
 	AEndlessRunnerGameMode();
+
 };
 
 

@@ -37,3 +37,8 @@ void UMyGameInstance::AddToData()
 {
 	Data.Add(TemporaryData);
 }
+
+FString UMyGameInstance::GetGameVersion() const
+{
+	return GameVersion;
+}

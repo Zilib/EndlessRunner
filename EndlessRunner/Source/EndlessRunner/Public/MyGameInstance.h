@@ -29,7 +29,6 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "Game")
 	int32 LastTraveledDistance{ 0 };  // When player is running he is making an distance! Save here his last done distance.
 
-
 /// Setters
 	// Save temporary player name to then save it to proper variable
 	UFUNCTION(BlueprintCallable, Category = "TData")
@@ -55,8 +54,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "TData")
 	TArray<FScoreBoard> GetData();
 
+	// Get game version
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	FString GetGameVersion() const;
+
 private:
 	FScoreBoard TemporaryData; // Save here data which will be saved into Data array
 
 	TArray<FScoreBoard> Data; 
+
+	FString GameVersion{ "1.1" }; // Set game version, can be changed only in the code.
 };

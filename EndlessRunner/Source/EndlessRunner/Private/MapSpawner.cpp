@@ -39,12 +39,6 @@ float AMapSpawner::TotalFlightTime() const
 	return  (2 * V0 * RunnerHero->GetSin()) / GetWorld()->GetGravityZ() * -1;
 }
 
-// Projectile motion pattern
-float AMapSpawner::GetDisplacement(float V0, float t, float Cos0) const
-{
-	return V0 * t * Cos0;
-}
-
 // Separately functions for every corridor
 void AMapSpawner::SpawnCorridor()
 {

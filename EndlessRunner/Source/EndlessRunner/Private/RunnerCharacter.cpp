@@ -5,8 +5,10 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/ActorComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "MyGameInstance.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Math/UnrealMathUtility.h"
 #include "Math/Vector.h"
 #include "Corridor.h"
@@ -46,6 +48,10 @@ ARunnerCharacter::ARunnerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));
+	ImpactBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	ImpactBlast->bAutoActivate = false;
 }
 
 void ARunnerCharacter::BeginPlay()
@@ -212,6 +218,8 @@ void ARunnerCharacter::KillARunner()
 {
 	if (GetController())
 	{
-		Controller->UnPossess();
+		Cast<UActorComponent>(GetMesh())->DestroyComponent();
+		ImpactBlast->SetActive(true);
+		GetCharacterMovement()->SetActive(false);
 	}
 }

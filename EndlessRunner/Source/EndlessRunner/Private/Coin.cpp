@@ -19,7 +19,7 @@ ACoin::ACoin()
 	CollisionCapsule = CreateDefaultSubobject<UCapsuleComponent>(FName("Box Component"));
 	CollisionCapsule->SetRelativeLocation(FVector(.0f, .0f, 340.f));
 	CollisionCapsule->InitCapsuleSize(385.f, 814.f);
-	CollisionCapsule->AttachTo(StaticMesh);
+	CollisionCapsule->AttachToComponent(StaticMesh, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 void ACoin::BeginPlay()

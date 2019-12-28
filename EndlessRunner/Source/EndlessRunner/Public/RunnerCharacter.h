@@ -7,7 +7,7 @@
 #include "MyGameInstance.h"
 #include "RunnerCharacter.generated.h"
 
-class UUserWidget;
+class UParticleSystemComponent;
 
 UCLASS()
 class ENDLESSRUNNER_API ARunnerCharacter : public ACharacter
@@ -34,7 +34,6 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-
 
 	/// Getters
 	// Return traveled distance in meters
@@ -87,5 +86,8 @@ private:
 	float TotalDistanceTraveled{ 0.0f };
 
 	FVector LastRecordedLocation;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UParticleSystemComponent* ImpactBlast;
 
 };

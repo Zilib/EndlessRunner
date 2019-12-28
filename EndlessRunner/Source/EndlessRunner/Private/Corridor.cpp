@@ -56,6 +56,19 @@ void ACorridor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Othe
 	}
 }
 
+// Kill a player when he hit a front wall
+void ACorridor::KillPlayer(AActor* Player)
+{
+	if (ARunnerCharacter* Runner = Cast<ARunnerCharacter>(Player))
+	{
+		// If player cannot jump, he is in the air. So he hit the wall during he jump. That is a reason to kill him! And forbidd play anymore
+		if (!Runner->CanJump()) 
+		{
+			Runner->KillARunner();
+		}
+	}
+}
+
 void ACorridor::DestroyObject()
 {
 	// if spawned coin exists, and you cannot collect it any more. Just destroy it

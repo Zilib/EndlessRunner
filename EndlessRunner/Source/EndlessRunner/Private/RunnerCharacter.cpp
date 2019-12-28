@@ -66,6 +66,7 @@ void ARunnerCharacter::Tick(float DeltaSeconds)
 	MoveForward(1);
 	// Increase traveled distance 
 	TotalDistanceTraveled += FVector::DotProduct(GetVelocity(), GetActorRotation().Vector()) / 100;
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -162,13 +163,16 @@ void ARunnerCharacter::MoveRight(float Value)
 // Change a runner directory while he is running. Using only if you make an turn.
 void ARunnerCharacter::TurnARunner(float Value)
 {
-	const FRotator Rotation = Controller->GetControlRotation();
-	const FRotator NewRotation = FRotator(
-		Rotation.Pitch,
-		Rotation.Yaw + Value,
-		Rotation.Roll
-	);
-	Controller->SetControlRotation(NewRotation);
+	if (Controller) // Turn a character, who is controlled by player. 
+	{
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator NewRotation = FRotator(
+			Rotation.Pitch,
+			Rotation.Yaw + Value,
+			Rotation.Roll
+		);
+		Controller->SetControlRotation(NewRotation);
+	}
 }
 
 // Return traveled distance in meters
@@ -207,4 +211,12 @@ float ARunnerCharacter::GetMaxJumpHeight() const
 float ARunnerCharacter::TimeToReachMaximumHeight() const
 {
 	return (GetV0Velocity() * GetSin()) / GetWorld()->GetGravityZ();
+}
+
+void ARunnerCharacter::KillARunner()
+{
+	if (GetController())
+	{
+		Controller->UnPossess();
+	}
 }

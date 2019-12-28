@@ -63,5 +63,5 @@ private:
 
 	TArray<FScoreBoard> Data; 
 
-	FString GameVersion{ "1.1" }; // Set game version, can be changed only in the code.
+	FString GameVersion{ "1.0" }; // Set game version, can be changed only in the code.
 };

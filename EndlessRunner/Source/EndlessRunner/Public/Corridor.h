@@ -6,6 +6,7 @@
 #include "TimerManager.h"
 #include "Components/BoxComponent.h"
 #include "Coin.h"
+#include "RunnerCharacter.h"
 #include "Corridor.generated.h"
 
 class AObstacle;
@@ -52,4 +53,8 @@ private:
 	TSubclassOf<ACoin> CoinToSpawn;
 
 	ACoin* SpawnedCoin;
+
+	// Kill a player when he hit a front wall
+	UFUNCTION(BlueprintCallable) 
+	void KillPlayer(AActor* Player);
 };

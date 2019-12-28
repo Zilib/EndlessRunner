@@ -58,6 +58,11 @@ public:
 
 	// Return time to reach maximum height
 	float TimeToReachMaximumHeight() const;
+
+	// Kill a runner
+	UFUNCTION(BlueprintCallable)
+	void KillARunner();
+
 protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);

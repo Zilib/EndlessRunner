@@ -29,6 +29,6 @@ UENUM(BlueprintType)
 enum class EActiveBoard : uint8
 {
 	GMainMenu UMETA(DisplayName = "Main Menu"), // Main menu, here player can select what he want to do. 
-	GScoreBoard UMETA(DisplayName = "Score Board"), // Player can look at the best of 10 players
-	GSaveGame UMETA(DisplayName = "Save Game") // He can also save his data to share with community
+	GScoreBoard UMETA(DisplayName = "Scoreboard"), // Player can look at the best of 10 players
+	GSaveGame UMETA(DisplayName = "Save Score") // He can also save his data to share with community
 };

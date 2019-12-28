@@ -21,12 +21,6 @@ void UMyGameInstance::SetCollectedItems(FString CollectedItems)
 {
 	TemporaryData.CollectedItems = FCString::Atoi(*CollectedItems);
 }
-// Return a copy of data
-TArray<FScoreBoard> UMyGameInstance::GetData()
-{
-	return Data; // Return a copy of data
-}
-
 // Clear temporary data, i never want to double my results.
 void UMyGameInstance::ClearTemporaryArray()
 {
@@ -36,9 +30,4 @@ void UMyGameInstance::ClearTemporaryArray()
 void UMyGameInstance::AddToData()
 {
 	Data.Add(TemporaryData);
-}
-
-FString UMyGameInstance::GetGameVersion() const
-{
-	return GameVersion;
 }

@@ -66,9 +66,10 @@ private:
 	// A function which will check and make random function.
 	bool RandomGenerator(int Chance);
 
-	// Calculate where should be spawned next corridor, if runner have to jump
-	float GetDisplacement(float V0, float t, float Cos0) const;
+	// Calculate where should be spawned next corridor, if runner have to jump. Use projectile motion pattern
+	FORCEINLINE float GetDisplacement(float V0, float t, float Cos0) const { return V0 * t* Cos0; }
 
+	// It is constant value which mean what the corridor displacement is. Actually is not to change, in future it will not const, and displacement will be dependendent of player speed. Actually Runner speed is also constant
 	float CorridorDisplacement;
 
 	UPROPERTY(EditAnywhere, Category = "Setup")

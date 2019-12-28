@@ -175,11 +175,6 @@ void ARunnerCharacter::TurnARunner(float Value)
 	}
 }
 
-// Return traveled distance in meters
-int32 ARunnerCharacter::GetTotalDistanceTraveled() const
-{
-	return (int32)TotalDistanceTraveled / 1000;
-}
 
 // Return an V0 velocity, it is necessary for calculate projectile motion
 float ARunnerCharacter::GetV0Velocity() const

@@ -35,10 +35,11 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+
 	/// Getters
-	// Return traveled distance in meter
+	// Return traveled distance in meters
 	UFUNCTION(BlueprintCallable, Category = "Score")
-	int32 GetTotalDistanceTraveled() const;
+	FORCEINLINE int32 GetTotalDistanceTraveled() const { return (int32)TotalDistanceTraveled / 1000; };
 
 	// Call to this, if you want to change hero director
 	UFUNCTION(BlueprintCallable)
@@ -48,7 +49,7 @@ public:
 	float GetV0Velocity() const; 
 
 	// Retrun sinus of V0 and Vy 
-	float GetSin() const; 
+	FORCEINLINE float GetSin() const; 
 
 	// Return cosinus of V0 and Vx
 	float GetCos() const;
@@ -62,7 +63,6 @@ public:
 	// Kill a runner
 	UFUNCTION(BlueprintCallable)
 	void KillARunner();
-
 protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);

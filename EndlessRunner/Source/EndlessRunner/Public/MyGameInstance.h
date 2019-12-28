@@ -52,11 +52,11 @@ public:
 /// Getters 
 	// Get a copy of FScoreBoard table, to show it on the screen
 	UFUNCTION(BlueprintCallable, Category = "TData")
-	TArray<FScoreBoard> GetData();
+	FORCEINLINE TArray<FScoreBoard> GetData() { return Data; }
 
 	// Get game version
 	UFUNCTION(BlueprintCallable, Category = "Setup")
-	FString GetGameVersion() const;
+	FORCEINLINE	FString GetGameVersion() const { return GameVersion; }
 
 private:
 	FScoreBoard TemporaryData; // Save here data which will be saved into Data array

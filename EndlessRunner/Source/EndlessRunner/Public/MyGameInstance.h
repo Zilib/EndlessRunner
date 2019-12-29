@@ -29,6 +29,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "Game")
 	int32 LastTraveledDistance{ 0 };  // When player is running he is making an distance! Save here his last done distance.
 
+	// Main interface, which menu is actually active.
+	UPROPERTY(BlueprintReadWrite)
+	EActiveBoard ActiveBoard{ EActiveBoard::GMainMenu };
 /// Setters
 	// Save temporary player name to then save it to proper variable
 	UFUNCTION(BlueprintCallable, Category = "TData")
@@ -49,6 +52,7 @@ public:
 	// Now save all data into a array
 	UFUNCTION(BlueprintCallable)
 	void AddToData();
+
 /// Getters 
 	// Get a copy of FScoreBoard table, to show it on the screen
 	UFUNCTION(BlueprintCallable, Category = "TData")

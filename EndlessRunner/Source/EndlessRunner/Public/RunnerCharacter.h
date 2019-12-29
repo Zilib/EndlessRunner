@@ -85,9 +85,14 @@ private:
 	// It will be showed at screen, as score.
 	float TotalDistanceTraveled{ 0.0f };
 
+	// Delay to call function "RestartLevel" to show menu
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float DelayToRestart{ 1.0f };
+
 	FVector LastRecordedLocation;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UParticleSystemComponent* ImpactBlast;
 
+	void RestartLevel(); // When player die, wait 1.5 sec and restart level
 };

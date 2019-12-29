@@ -10,6 +10,7 @@
 #include "MyGameInstance.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Math/UnrealMathUtility.h"
+#include "Kismet/GameplayStatics.h"
 #include "Math/Vector.h"
 #include "Corridor.h"
 #include "GameFramework/Controller.h"
@@ -218,8 +219,20 @@ void ARunnerCharacter::KillARunner()
 {
 	if (GetController())
 	{
-		Cast<UActorComponent>(GetMesh())->DestroyComponent();
-		ImpactBlast->SetActive(true);
-		GetCharacterMovement()->SetActive(false);
+		Cast<UActorComponent>(GetMesh())->DestroyComponent(); // Destroy skeletal mesh, it doesn't look good when player died, but his hero is still alive.
+		ImpactBlast->SetActive(true); // Make boom there where were an player
+		GetCharacterMovement()->SetActive(false); // When player cannot move he is die.
+
+		FTimerHandle TimeToRestartLevel;
+		GetWorld()->GetTimerManager().SetTimer(TimeToRestartLevel, this, &ARunnerCharacter::RestartLevel, DelayToRestart, false);
 	}
+}
+
+void ARunnerCharacter::RestartLevel()
+{
+	if (UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance()))
+	{
+		GameInstance->LastTraveledDistance = GetTotalDistanceTraveled(); // Save last traveled distance.
+	}
+	UGameplayStatics::OpenLevel(GetWorld(), FName("Level1")); // Now restart everything
 }

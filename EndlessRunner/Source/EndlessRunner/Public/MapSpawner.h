@@ -106,6 +106,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Item spawner")
 	TSubclassOf<ACoin> ItemToSpawn; // Select "coin" class
 
+	// Multiply every collected bottle by this value and add it to score
+	UPROPERTY(EditAnywhere, Category = "Item spawner")
+	int32 ItemValue {100};
 public:	
 	// Sets default values for this actor's properties
 	AMapSpawner();

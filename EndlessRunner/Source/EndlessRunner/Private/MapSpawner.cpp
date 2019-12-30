@@ -17,6 +17,7 @@ AMapSpawner::AMapSpawner()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
 }
 
 // Called when the game starts or when spawned
@@ -30,6 +31,8 @@ void AMapSpawner::BeginPlay()
 	GetWorld()->GetTimerManager().SetTimer(hTimer, this, &AMapSpawner::GenerateMap, .01f, true);
 	// That is constant value
 	CorridorDisplacement = GetDisplacement(RunnerHero->GetV0Velocity(), TotalFlightTime(), RunnerHero->GetCos()) - DisplacementMarginValue;
+
+	Cast<UMyGameInstance>(GetGameInstance())->ItemValue = this->ItemValue;
 }
 
 // Calculate total jump flight time.

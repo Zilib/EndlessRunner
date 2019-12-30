@@ -18,10 +18,7 @@ struct ENDLESSRUNNER_API FScoreBoard
 	FString PlayerName;
 
 	UPROPERTY(BlueprintReadWrite)
-	int32 TraveledMeters;
-
-	UPROPERTY(BlueprintReadWrite)
-	int32 CollectedItems;
+	int32 Score;
 };
 
 // Which kind of menu is currenctly open

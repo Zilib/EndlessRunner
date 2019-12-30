@@ -8,23 +8,25 @@
 #include "GenericPlatform/GenericPlatformFile.h"
 #include "Misc/FileHelper.h"
 
+// If you do not wanna see a save score btn, or you want to reset statistics use it
+void UMyGameInstance::ClearLevelData()
+{
+	CollectedItem = 0;
+	TraveledDistance = 0;
+}
+
 // Save player name into a variable
 void UMyGameInstance::SetPlayerName(FString PlayerName)
 {
 	TemporaryData.PlayerName = PlayerName;
 }
 
-// Save traveled meters into a variable
-void UMyGameInstance::SetTraveledMeters(FString TraveledMeters)
+// Save score into a variable
+void UMyGameInstance::SetScore(int32 Score)
 {
-	TemporaryData.TraveledMeters = FCString::Atoi(*TraveledMeters);
+	TemporaryData.Score = Score;
 }
 
-// Save collected items into a variable
-void UMyGameInstance::SetCollectedItems(FString CollectedItems)
-{
-	TemporaryData.CollectedItems = FCString::Atoi(*CollectedItems);
-}
 // Clear temporary data, i never want to double my results.
 void UMyGameInstance::ClearTemporaryArray()
 {

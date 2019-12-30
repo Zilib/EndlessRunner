@@ -6,7 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "Components/AudioComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "CollectSound.h"
 #include "Coin.generated.h"
 
 

@@ -36,9 +36,6 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	/// Getters
-	// Return traveled distance in meters
-	UFUNCTION(BlueprintCallable, Category = "Score")
-	FORCEINLINE int32 GetTotalDistanceTraveled() const { return (int32)TotalDistanceTraveled / 1000; };
 
 	// Call to this, if you want to change hero director
 	UFUNCTION(BlueprintCallable)
@@ -82,15 +79,12 @@ protected:
 
 	bool CanMoveRight(float Value); // Forbid player move into a wall
 private:
-	// It will be showed at screen, as score.
-	float TotalDistanceTraveled{ 0.0f };
 
 	// Delay to call function "RestartLevel" to show menu
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	float DelayToRestart{ 1.0f };
 
-	FVector LastRecordedLocation;
-
+	// Make boom after die
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UParticleSystemComponent* ImpactBlast;
 

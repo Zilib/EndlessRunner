@@ -72,7 +72,7 @@ void ARunnerCharacter::Tick(float DeltaSeconds)
 	
 	MoveForward(1);
 	// Increase traveled distance 
-	TotalDistanceTraveled += FVector::DotProduct(GetVelocity(), GetActorRotation().Vector()) / 100;
+	Cast<UMyGameInstance>(GetGameInstance())->TraveledDistance += FVector::DotProduct(GetVelocity(), GetActorRotation().Vector()) / 100;
 
 }
 
@@ -230,9 +230,5 @@ void ARunnerCharacter::KillARunner()
 
 void ARunnerCharacter::RestartLevel()
 {
-	if (UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance()))
-	{
-		GameInstance->LastTraveledDistance = GetTotalDistanceTraveled(); // Save last traveled distance.
-	}
 	UGameplayStatics::OpenLevel(GetWorld(), FName("Level1")); // Now restart everything
 }

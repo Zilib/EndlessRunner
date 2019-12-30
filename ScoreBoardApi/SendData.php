@@ -1,21 +1,19 @@
-
 <?php
-header('Content-Type: application/json');
+if (@$_GET['PlayerName'] && $_GET['Score']) {
+    echo "dsadsa";
     $HostName = 'localhost';
     $db = 'EndlessRunner';
     $username = 'root';
     $password = '';
-
     try {
         $dbh = new PDO('mysql:host=localhost;dbname=EndlessRunner',$username,$password);
-        $stmt = $dbh->prepare('SELECT * FROM scoreboard  ORDER BY Score DESC LIMIT 10');
+        $stmt = $dbh->prepare('INSERT INTO scoreboard (PlayerName, Score) VALUES (?, ?);');
+        $stmt->bindParam(1,$_GET['PlayerName'], PDO::PARAM_STR);
+        $stmt->bindParam(2,$_GET['Score'], PDO::PARAM_INT);
         $stmt->execute();
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $payload = json_encode($results, JSON_FORCE_OBJECT);
-
-        print $payload;
 
     }   catch (PDOException $e) {
         echo "nie Działa";
     } 
+}
 ?>

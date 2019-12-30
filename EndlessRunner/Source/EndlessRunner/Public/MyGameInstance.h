@@ -15,6 +15,9 @@ class ENDLESSRUNNER_API UMyGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 public:
+	// Clear all variables, prepare level for start
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void ClearLevelData();
 	// To check does overlap actor is main hero
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Setup")
 	FString RunnerBPName;
@@ -23,11 +26,25 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Setup")
 	FString CollectingItemName{ "Bottle" };
 
-	UPROPERTY(BlueprintReadWrite, Category = "Game")
-	int32 CollectedItem{ 0 }; // When player get a item, collect it here!
+	// When player get a item, collect it here!
+	UPROPERTY(BlueprintReadWrite, Category = "Game Statistics")
+	int32 CollectedItem{ 0 }; 
 
-	UPROPERTY(BlueprintReadWrite, Category = "Game")
-	int32 LastTraveledDistance{ 0 };  // When player is running he is making an distance! Save here his last done distance.
+	// When player is running he is making an distance! Save here his last done distance.
+	UPROPERTY(BlueprintReadWrite, Category = "Game Statistics")
+	int32 TraveledDistance{ 0 };  
+		
+	// Add multiply of it and collected items into score
+	UPROPERTY(VisibleAnywhere, Category = "Game Statistics")
+	int32 ItemValue{ 100 }; 
+
+	// Pattern: TraveledDistance / 33 + CollectedItem * ItemValue
+	UFUNCTION(BlueprintCallable, Category = "Game Statistics")
+	FORCEINLINE int32 GetScore() const { return (TraveledDistance / 33) + CollectedItem * ItemValue; }
+
+	// Return traveled distance in meters
+	UFUNCTION(BlueprintCallable, Category = "Game Statistics")
+	FORCEINLINE int32 GetTotalDistanceTraveled() const { return TraveledDistance / 1000; };
 
 	// Main interface, which menu is actually active.
 	UPROPERTY(BlueprintReadWrite, Category = "Game")
@@ -37,13 +54,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "TData")
 	void SetPlayerName(FString PlayerName);
 
-	// Save temporary temporary meters to then save it to proper variable
+	// Save temporary temporary score to then save it to proper variable
 	UFUNCTION(BlueprintCallable, Category = "TData")
-	void SetTraveledMeters(FString TraveledMeters);
-
-	// Save temporary collected items to then save it to proper variable
-	UFUNCTION(BlueprintCallable, Category = "TData")
-	void SetCollectedItems(FString CollectedItems);
+	void SetScore(int32 Score);
 
 	// Clear temporary array, it is a prepare before get a new data.
 	UFUNCTION(BlueprintCallable, Category = "TData")
@@ -62,12 +75,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	FORCEINLINE	FString GetGameVersion() const { return GameVersion; }
 
+	// Call into file, which is into data directory and is named "config.txt"
 	UFUNCTION(BlueprintCallable, Category = "Server")
 	FString GetServerIP();
 private:
-	FScoreBoard TemporaryData; // Save here data which will be saved into Data array
+	// Save here data which will be saved into Data array
+	FScoreBoard TemporaryData; 
 
+	// Here are stored table records, which you can see after click scoreboard.
 	TArray<FScoreBoard> Data; 
 
-	FString GameVersion{ "1.0" }; // Set game version, can be changed only in the code.
+	// Set game version, can be changed only in the code.
+	FString GameVersion{ "1.0" }; 
 };

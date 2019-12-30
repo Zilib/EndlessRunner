@@ -31,6 +31,8 @@ public:
 
 	// Only keep to destroy this in the future. Destroy it with corridor
 	AObstacle* SpawnedObstacleRock{ nullptr };
+
+	ACoin* SpawnedItem{ nullptr };
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -46,13 +48,7 @@ private:
 	// Every will destroy after 1 sec of begin overlap. It handle time of it
 	FTimerHandle Handler;
 
-	// Collecting system, spwan coins
-	void SpawnCoin();
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<ACoin> CoinToSpawn;
-
-	ACoin* SpawnedCoin;
+	
 
 	// Kill a player when he hit a front wall
 	UFUNCTION(BlueprintCallable) 

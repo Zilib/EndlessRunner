@@ -98,7 +98,14 @@ private:
 	void SpawnObstacleRock();
 
 	FTransform SpawnPointTransform; // Next spawn point location
-	TSubclassOf<ACorridor> CorridorToSpawn = NULL; // Which kind of corridor will be spawned next
+	TSubclassOf<ACorridor> CorridorToSpawn = NULL; // What kind of corridor will be spawned next
+
+	void SpawnItem(); // Spawn coin
+
+	// Item spawner
+	UPROPERTY(EditAnywhere, Category = "Item spawner")
+	TSubclassOf<ACoin> ItemToSpawn; // Select "coin" class
+
 public:	
 	// Sets default values for this actor's properties
 	AMapSpawner();
@@ -113,4 +120,5 @@ public:
 	// Give me here a blueprint of obstacle to spawn!
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AObstacle> ObstacleBP;
+
 };

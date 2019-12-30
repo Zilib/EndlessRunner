@@ -81,6 +81,7 @@ void AMapSpawner::SpawnStraightCorridor()
 	LastWasTurn = false;
 
 	SpawnCorridor();
+	SpawnItem();
 	if (SpawnedCorridors > WaitCorridors) // Wait after start game "Wait Corridors" corridors before start spawning rocks
 	{
 		SpawnObstacleRock();
@@ -231,5 +232,29 @@ void AMapSpawner::SpawnObstacleRock()
 	PreviousCorridor->SpawnedObstacleRock = GetWorld()->SpawnActor<AObstacle>(
 		ObstacleBP,
 		RockSpawnTransform
+	);
+}
+
+void AMapSpawner::SpawnItem()
+{
+	int32 SocketNumber = FMath::FRandRange(1,3); // Item can be only spawned in 3 places, so make random choice.
+	FTransform NextItemSpawnTransform; // Here will be next spawn transform
+
+	// Every item can be spawned only at the entry of straight corridor.
+	if (SocketNumber == 1)
+	{
+		NextItemSpawnTransform = PreviousCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPointItem1")); // Spawn at left side
+	}
+	else if (SocketNumber == 2)
+	{
+		NextItemSpawnTransform = PreviousCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPointItem2")); // Spawn at center
+	}
+	else if (SocketNumber == 3)
+	{
+		NextItemSpawnTransform = PreviousCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPointItem3")); // Spawn at right side
+	}
+	PreviousCorridor->SpawnedItem = GetWorld()->SpawnActor<ACoin>(
+		ItemToSpawn,
+		NextItemSpawnTransform
 	);
 }

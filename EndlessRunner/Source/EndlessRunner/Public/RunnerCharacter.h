@@ -48,7 +48,7 @@ public:
 	float GetV0Velocity() const; 
 
 	// Retrun sinus of V0 and Vy 
-	FORCEINLINE float GetSin() const; 
+	float GetSin() const; 
 
 	// Return cosinus of V0 and Vx
 	float GetCos() const;

@@ -10,7 +10,7 @@
 // Sets default values
 ACoin::ACoin()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Static Mesh"));
@@ -20,6 +20,12 @@ ACoin::ACoin()
 	CollisionCapsule->SetRelativeLocation(FVector(.0f, .0f, 340.f));
 	CollisionCapsule->InitCapsuleSize(385.f, 814.f);
 	CollisionCapsule->AttachToComponent(StaticMesh, FAttachmentTransformRules::KeepRelativeTransform);
+
+	SoundToSpawn = CreateDefaultSubobject<UAudioComponent>(FName("Collect Sound"));
+	SoundToSpawn->bAutoActivate = false; // Do not play sound at start the game
+	SoundToSpawn->bOverrideAttenuation = true;
+	SoundToSpawn->bAutoDestroy = true; 
+	SoundToSpawn->bStopWhenOwnerDestroyed = false; // Play after coin destroy
 }
 
 void ACoin::BeginPlay()
@@ -33,7 +39,11 @@ void ACoin::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 {
 	if (OtherActor->GetName() == Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName)
 	{
+		// Increase number of collected items
 		Cast<UMyGameInstance>(GetGameInstance())->CollectedItem++;
+
+		SoundToSpawn->Play(); // Coin is collected give sound!
+
 		Destroy();
 	}
 }

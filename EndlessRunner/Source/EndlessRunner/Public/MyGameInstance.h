@@ -30,7 +30,7 @@ public:
 	int32 LastTraveledDistance{ 0 };  // When player is running he is making an distance! Save here his last done distance.
 
 	// Main interface, which menu is actually active.
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Category = "Game")
 	EActiveBoard ActiveBoard{ EActiveBoard::GMainMenu };
 /// Setters
 	// Save temporary player name to then save it to proper variable
@@ -62,6 +62,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	FORCEINLINE	FString GetGameVersion() const { return GameVersion; }
 
+	UFUNCTION(BlueprintCallable, Category = "Server")
+	FString GetServerIP();
 private:
 	FScoreBoard TemporaryData; // Save here data which will be saved into Data array
 

@@ -3,6 +3,10 @@
 
 #include "MyGameInstance.h"
 #include "Containers/Array.h"
+#include "Misc/Paths.h"
+#include "HAL/PlatformFilemanager.h"
+#include "GenericPlatform/GenericPlatformFile.h"
+#include "Misc/FileHelper.h"
 
 // Save player name into a variable
 void UMyGameInstance::SetPlayerName(FString PlayerName)
@@ -30,4 +34,19 @@ void UMyGameInstance::ClearTemporaryArray()
 void UMyGameInstance::AddToData()
 {
 	Data.Add(TemporaryData);
+}
+
+// In file should be only ip address, so if everything is fine. It will work.
+FString UMyGameInstance::GetServerIP()
+{
+	FString directory = FPaths::Combine(FPaths::GameContentDir(), TEXT("Data"));
+	FString result;
+	IPlatformFile& file = FPlatformFileManager::Get().GetPlatformFile();
+
+	if (file.CreateDirectory(*directory))
+	{
+		FString myFile = directory + "/config.txt";
+		FFileHelper::LoadFileToString(result, *myFile);
+	}
+	return result;
 }

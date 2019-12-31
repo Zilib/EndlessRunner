@@ -6,6 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/ActorComponent.h"
+#include "Components/AudioComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "MyGameInstance.h"
 #include "Particles/ParticleSystemComponent.h"
@@ -53,6 +54,12 @@ ARunnerCharacter::ARunnerCharacter()
 	ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));
 	ImpactBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	ImpactBlast->bAutoActivate = false;
+
+	DieSound = CreateDefaultSubobject<UAudioComponent>(FName("Die Sound"));
+	DieSound->bAutoActivate = false; // Do not play at start
+	DieSound->bAllowSpatialization = false; // It must play doesnt matter which ear.
+	DieSound->bStopWhenOwnerDestroyed = false; // Play after die
+
 }
 
 void ARunnerCharacter::BeginPlay()
@@ -182,7 +189,6 @@ void ARunnerCharacter::TurnARunner(float Value)
 	}
 }
 
-
 // Return an V0 velocity, it is necessary for calculate projectile motion
 float ARunnerCharacter::GetV0Velocity() const
 {
@@ -222,7 +228,10 @@ void ARunnerCharacter::KillARunner()
 		Cast<UActorComponent>(GetMesh())->DestroyComponent(); // Destroy skeletal mesh, it doesn't look good when player died, but his hero is still alive.
 		ImpactBlast->SetActive(true); // Make boom there where were an player
 		GetCharacterMovement()->SetActive(false); // When player cannot move he is die.
-
+		if (DieSound)
+		{
+			DieSound->Play(); // Make boom after die
+		}
 		FTimerHandle TimeToRestartLevel;
 		GetWorld()->GetTimerManager().SetTimer(TimeToRestartLevel, this, &ARunnerCharacter::RestartLevel, DelayToRestart, false);
 	}

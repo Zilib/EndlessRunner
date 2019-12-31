@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "MyGameInstance.h"
+#include "Components/AudioComponent.h"
 #include "RunnerCharacter.generated.h"
 
 class UParticleSystemComponent;
@@ -36,7 +37,6 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	/// Getters
-
 	// Call to this, if you want to change hero director
 	UFUNCTION(BlueprintCallable)
 	void TurnARunner(float Value);
@@ -79,14 +79,16 @@ protected:
 
 	bool CanMoveRight(float Value); // Forbid player move into a wall
 private:
-
-	// Delay to call function "RestartLevel" to show menu
+	// Delay to call function "RestartLevel" to show menu, find how long is boom sound.
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	float DelayToRestart{ 1.0f };
 
 	// Make boom after die
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UParticleSystemComponent* ImpactBlast;
+	UParticleSystemComponent* ImpactBlast{ nullptr };
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UAudioComponent* DieSound{ nullptr };
 
 	void RestartLevel(); // When player die, wait 1.5 sec and restart level
 };

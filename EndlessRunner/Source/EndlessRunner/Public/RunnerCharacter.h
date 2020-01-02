@@ -37,6 +37,12 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	/// Getters
+	// Map spawner need this value for change level difficulty
+	float GetMaxWalkSpeed() const;
+
+	// Return JumpZVelocity
+	float GetJumpZVelocity() const;
+
 	// Call to this, if you want to change hero director
 	UFUNCTION(BlueprintCallable)
 	void TurnARunner(float Value);
@@ -59,6 +65,8 @@ public:
 	// Kill a runner
 	UFUNCTION(BlueprintCallable)
 	void KillARunner();
+
+	void IncreaseSpeed(); // Make level harder, and player will be faster
 protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);

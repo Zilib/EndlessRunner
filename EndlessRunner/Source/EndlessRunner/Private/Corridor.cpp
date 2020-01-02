@@ -19,6 +19,7 @@ ACorridor::ACorridor()
 	
 	TriggerDestroy = CreateDefaultSubobject<UBoxComponent>(FName("Box Component"));
 	TriggerDestroy->AttachToComponent(CorridorMesh, FAttachmentTransformRules::KeepRelativeTransform);
+
 }
 
 // Called when the game starts or when spawned
@@ -27,11 +28,23 @@ void ACorridor::BeginPlay()
 	Super::BeginPlay();
 	TriggerDestroy->OnComponentBeginOverlap.AddDynamic(this, &ACorridor::OnOverlapBegin);
 
+	// Tell game, player will be faster, so game must know how fast player will when he will reach next corridor to change displacement
+	if (UMyGameInstance * GameInstance = Cast<UMyGameInstance>(GetGameInstance()))
+	{
+		GameInstance->IncreaseSpeed();
+	}
 }
 
 void ACorridor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (!Cast<UMyGameInstance>(GetGameInstance())) { return; }
+
+	// Increase player speed after reach corridor
+	if (ARunnerCharacter* Player = Cast<ARunnerCharacter>(OtherActor))
+	{
+		// Make player run faster
+		Player->IncreaseSpeed();
+	}
 
 	// If collision is with hero
 	if (OtherActor->GetName() == Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName)
@@ -66,5 +79,8 @@ void ACorridor::DestroyObject()
 	{
 		SpawnedItem->Destroy();
 	}
-	Destroy();
+	if (this)
+	{
+		Destroy();
+	}
 }

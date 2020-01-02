@@ -48,8 +48,6 @@ private:
 	// Every will destroy after 1 sec of begin overlap. It handle time of it
 	FTimerHandle Handler;
 
-	
-
 	// Kill a player when he hit a front wall
 	UFUNCTION(BlueprintCallable) 
 	void KillPlayer(AActor* Player);

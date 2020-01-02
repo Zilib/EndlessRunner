@@ -38,6 +38,15 @@ void UMyGameInstance::AddToData()
 	Data.Add(TemporaryData);
 }
 
+void UMyGameInstance::IncreaseSpeed()
+{
+	// If player did not reach max speed.
+	if (PlayerSpeed + Acceleration <= MaxPlayerSpeed)
+	{
+		PlayerSpeed += Acceleration;
+	}
+}
+
 // In file should be only ip address, so if everything is fine. It will work.
 FString UMyGameInstance::GetServerIP()
 {

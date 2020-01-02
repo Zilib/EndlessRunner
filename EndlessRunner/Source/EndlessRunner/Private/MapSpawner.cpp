@@ -17,7 +17,6 @@ AMapSpawner::AMapSpawner()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -26,13 +25,15 @@ void AMapSpawner::BeginPlay()
 	Super::BeginPlay();
 
 	if (!ensure(PreviousCorridor)) { return; }
-	if (Corridors.Num() == 0) { return;  } 
+	if (Corridors.Num() == 0) { return; }
 
 	GetWorld()->GetTimerManager().SetTimer(hTimer, this, &AMapSpawner::GenerateMap, .01f, true);
-	// That is constant value
-	CorridorDisplacement = GetDisplacement(RunnerHero->GetV0Velocity(), TotalFlightTime(), RunnerHero->GetCos()) - DisplacementMarginValue;
 
-	Cast<UMyGameInstance>(GetGameInstance())->ItemValue = this->ItemValue;
+	GameInstance = Cast<UMyGameInstance>(GetGameInstance());
+
+	GameInstance->ItemValue = this->ItemValue;
+	GameInstance->Acceleration = this->Acceleration;
+	GameInstance->MaxPlayerSpeed = this->MaxPlayerSpeed;
 }
 
 // Calculate total jump flight time.
@@ -169,11 +170,19 @@ void AMapSpawner::SpawnTurnLeftCorridor()
 	SpawnCorridor();
 	LastWasTurn = true;
 }
+
 ////////////////////////
 
 void AMapSpawner::GenerateMap()
 {
-	if (RunnerHero->GetVelocity() == FVector(0,0,0)) { return; } // Spawn only player is moving. Don't spawn to much objects when it is not necessary
+	if (RunnerHero->GetVelocity() == FVector(0,0,0)) { return; } // Spawn whenever player is moving. Don't spawn to much objects when it is not necessary
+
+	// Player Speed is Vx, and RunnerJumpZVelocity is Vy it is equal to V0
+	UE_LOG(LogTemp, Warning, TEXT("%f"), GameInstance->PlayerSpeed);
+	CorridorDisplacement = GetDisplacement(
+		GameInstance->PlayerSpeed,
+		RunnerHero->GetJumpZVelocity(),
+		TotalFlightTime(), RunnerHero->GetCos()) - DisplacementMarginValue;
 
 	// Spawn turn left corridor, let him take a good velocity.
 	if (RandomGenerator(ChanceToTurnLeft)

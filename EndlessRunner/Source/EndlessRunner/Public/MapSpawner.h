@@ -12,6 +12,7 @@ class ACorridor;
 class ARunnerCharacter;
 class AObstacle;
 
+// Main cpp file, responsible for game, here are every important variables to set
 UCLASS()
 class ENDLESSRUNNER_API AMapSpawner : public AActor
 {
@@ -22,7 +23,9 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	int32 SpawnedCorridors{ 0 };
+	UMyGameInstance* GameInstance{ nullptr };
+
+	int32 SpawnedCorridors{ 0 }; // Number of spawned corridor
 
 	// Need for calculate maximum jump distance and height. For estimate an obscales difficulty level
 	UPROPERTY(EditAnywhere)
@@ -66,9 +69,6 @@ private:
 	// A function which will check and make random function.
 	bool RandomGenerator(int Chance);
 
-	// Calculate where should be spawned next corridor, if runner have to jump. Use projectile motion pattern
-	FORCEINLINE float GetDisplacement(float V0, float t, float Cos0) const { return V0 * t* Cos0; }
-
 	// It is constant value which mean what the corridor displacement is. Actually is not to change, in future it will not const, and displacement will be dependendent of player speed. Actually Runner speed is also constant
 	float CorridorDisplacement;
 
@@ -109,6 +109,12 @@ private:
 	// Multiply every collected bottle by this value and add it to score
 	UPROPERTY(EditAnywhere, Category = "Item spawner")
 	int32 ItemValue {100};
+
+	UPROPERTY(EditAnywhere, Category = "Game")
+	float Acceleration{ 10.0f }; // After overlap corridor, increase player speed by this value
+
+	UPROPERTY(EditAnywhere, Category = "Game")
+	float MaxPlayerSpeed{ 600.0f }; // Max player speed.
 public:	
 	// Sets default values for this actor's properties
 	AMapSpawner();
@@ -124,4 +130,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AObstacle> ObstacleBP;
 
+private:
+	// Calculate where should be spawned next corridor, if runner have to jump. Use projectile motion pattern
+	// Vx and Vy = will receive V0 with projectile motion pattern.
+	FORCEINLINE float GetDisplacement(float Vx, float Vy, float t, float Cos0) const { return  FMath::Sqrt(FMath::Pow(Vx, 2) + FMath::Pow(Vy, 2)) * t * Cos0;};
 };

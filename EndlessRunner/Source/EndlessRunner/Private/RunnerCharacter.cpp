@@ -68,7 +68,7 @@ void ARunnerCharacter::BeginPlay()
 
 	// Set character name, to allow check other comp does they collised with your hero
 	Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName = GetName();
-
+	Cast<UMyGameInstance>(GetGameInstance())->PlayerSpeed = GetCharacterMovement()->MaxWalkSpeed; // Save start player speed
 	// Because game is not started, player cannot move
 	GetCharacterMovement()->SetActive(false);
 }
@@ -224,6 +224,11 @@ float ARunnerCharacter::TimeToReachMaximumHeight() const
 {
 	return (GetV0Velocity() * GetSin()) / GetWorld()->GetGravityZ();
 }
+// Necessary for map spawner to change level difficulty
+float ARunnerCharacter::GetMaxWalkSpeed() const
+{
+	return GetCharacterMovement()->MaxWalkSpeed;
+}
 // Kill a runner, make boom restart statistics, and go into a main menu.
 void ARunnerCharacter::KillARunner()
 {
@@ -238,6 +243,24 @@ void ARunnerCharacter::KillARunner()
 		}
 		FTimerHandle TimeToRestartLevel;
 		GetWorld()->GetTimerManager().SetTimer(TimeToRestartLevel, this, &ARunnerCharacter::RestartLevel, DelayToRestart, false);
+	}
+}
+
+float ARunnerCharacter::GetJumpZVelocity() const
+{
+	return GetCharacterMovement()->JumpZVelocity;
+}
+
+// Increase player speed by acceleration value
+void ARunnerCharacter::IncreaseSpeed()
+{
+	if (UMyGameInstance* GInstance = Cast<UMyGameInstance>(GetGameInstance()))
+	{
+		// Increase playerspeed by Acceleration defined in the game instance
+		if (GetCharacterMovement()->MaxWalkSpeed + GInstance->Acceleration <= GInstance->MaxPlayerSpeed)
+		{
+			GetCharacterMovement()->MaxWalkSpeed += GInstance->Acceleration;
+		}
 	}
 }
 

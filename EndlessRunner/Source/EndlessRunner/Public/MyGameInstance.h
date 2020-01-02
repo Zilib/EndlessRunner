@@ -15,6 +15,15 @@ class ENDLESSRUNNER_API UMyGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 public:
+	// use this variable to change level difficulty, after overlapp corridor, add it.
+	float Acceleration{ 10.0f }; 
+
+	float MaxPlayerSpeed{ 600 }; 
+
+	float PlayerSpeed{ 200 }; // Player speed when reach a corridor which will be spawned
+
+	void IncreaseSpeed();
+
 	// Clear all variables, prepare level for start
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void ClearLevelData();

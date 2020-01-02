@@ -38,7 +38,7 @@ void ACorridor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Othe
 	{
 		FTimerHandle TimeToDestroy;
 		// set timer and after X time destroy object, and spawned items thankfully this object.
-		GetWorldTimerManager().SetTimer(TimeToDestroy, this, &ACorridor::DestroyObject, 3.0f, false);
+		GetWorldTimerManager().SetTimer(TimeToDestroy, this, &ACorridor::DestroyObject, 4.0f, false);
 	}
 }
 

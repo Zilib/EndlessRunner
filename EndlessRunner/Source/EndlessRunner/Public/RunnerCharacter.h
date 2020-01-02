@@ -89,6 +89,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UAudioComponent* DieSound{ nullptr };
+	
+	UPROPERTY(EditAnywhere, Category = "Setup")
+	float FallingMargin{ 200.0f }; // Margin of character falling, if runner doesn't jump he will be killed when he's getvelocity().z reach jumpZ velocity + falling margin
 
 	void RestartLevel(); // When player die, wait 1.5 sec and restart level
 };

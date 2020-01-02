@@ -78,14 +78,18 @@ void ARunnerCharacter::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	
 	MoveForward(1);
+
 	// Increase traveled distance 
 	Cast<UMyGameInstance>(GetGameInstance())->TraveledDistance += FVector::DotProduct(GetVelocity(), GetActorRotation().Vector()) / 100;
 
+	// If character is going down, he cannot reach more speed than JumpZVelocity, each one obstacle is not spawn below him
+	if (abs(GetVelocity().Z) > GetCharacterMovement()->JumpZVelocity + FallingMargin)
+	{
+		KillARunner();
+	}
 }
-
 //////////////////////////////////////////////////////////////////////////
 // Input
-
 void ARunnerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// Set up gameplay key bindings
@@ -220,7 +224,7 @@ float ARunnerCharacter::TimeToReachMaximumHeight() const
 {
 	return (GetV0Velocity() * GetSin()) / GetWorld()->GetGravityZ();
 }
-
+// Kill a runner, make boom restart statistics, and go into a main menu.
 void ARunnerCharacter::KillARunner()
 {
 	if (GetController())

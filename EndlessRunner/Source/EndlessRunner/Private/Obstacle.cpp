@@ -19,18 +19,3 @@ AObstacle::AObstacle()
 	CapsuleCollision->SetCapsuleRadius(130.0f);
 	CapsuleCollision->AttachTo(StaticMesh);
 }
-
-// Called when the game starts or when spawned
-void AObstacle::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void AObstacle::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-

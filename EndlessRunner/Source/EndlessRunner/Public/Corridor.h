@@ -3,15 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TimerManager.h"
 #include "Components/BoxComponent.h"
 #include "Coin.h"
-#include "InterfaceStructs.h"
+#include "Obstacle.h"
+#include "MyGameInstance.h"
 #include "RunnerCharacter.h"
 #include "Corridor.generated.h"
 
-class AObstacle;
-class UMyGameInstance;
+class ACoin;
 
 UCLASS()
 class ENDLESSRUNNER_API ACorridor : public AActor
@@ -36,23 +35,23 @@ public:
 	AObstacle* SpawnedObstacleRock{ nullptr };
 
 	ACoin* SpawnedItem{ nullptr };
+	// After begin overlap wait 3 second and destroy this element. 
+	 void DestroyObject();
 protected:
 	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	void BeginPlay() override;
 
 	/// Basiclly only for destory objects
 	UFUNCTION()
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 private:
-	// After begin overlap wait 3 second and destroy this element. 
-	void DestroyObject();
 
 	// Time untill destroy an object
 	FTimerHandle TimeToDestroy;
 	// Kill a player when he hit a front wall
 	UFUNCTION(BlueprintCallable) 
-	void KillPlayer(AActor* Player);
+	void KillPlayer(AActor* Player) const;
 
 	bool IsTimerActive{ false }; // Check does timer which is responsible for destroy object is active.
 };

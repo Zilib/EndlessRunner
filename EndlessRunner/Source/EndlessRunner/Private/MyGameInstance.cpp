@@ -48,16 +48,16 @@ void UMyGameInstance::IncreaseSpeed()
 }
 
 // In file should be only ip address, so if everything is fine. It will work.
-FString UMyGameInstance::GetServerIP()
+FString UMyGameInstance::GetServerIP() 
 {
-	FString directory = FPaths::Combine(FPaths::GameContentDir(), TEXT("Data"));
-	FString result;
-	IPlatformFile& file = FPlatformFileManager::Get().GetPlatformFile();
+	FString const Directory = FPaths::Combine(FPaths::ProjectContentDir(), TEXT("Data"));
+	FString Result;
+	IPlatformFile& File = FPlatformFileManager::Get().GetPlatformFile();
 
-	if (file.CreateDirectory(*directory))
+	if (File.CreateDirectory(*Directory))
 	{
-		FString myFile = directory + "/config.txt";
-		FFileHelper::LoadFileToString(result, *myFile);
+		FString const MyFile = Directory + "/config.txt";
+		FFileHelper::LoadFileToString(Result, *MyFile);
 	}
-	return result;
+	return Result;
 }

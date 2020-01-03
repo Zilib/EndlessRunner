@@ -6,11 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "Corridor.h"
 #include "TimerManager.h"
+#include "RunnerCharacter.h"
+#include "Obstacle.h"
 #include "MapSpawner.generated.h"
-
-class ACorridor;
-class ARunnerCharacter;
-class AObstacle;
 
 // Main cpp file, responsible for game, here are every important variables to set
 UCLASS()
@@ -67,7 +65,7 @@ private:
 	int32 ChanceToTurnRight{ 10 };
 
 	// A function which will check and make random function.
-	bool RandomGenerator(int Chance);
+	static bool RandomGenerator(int Chance);
 
 	// It is constant value which mean what the corridor displacement is. Actually is not to change, in future it will not const, and displacement will be dependendent of player speed. Actually Runner speed is also constant
 	float CorridorDisplacement;
@@ -95,7 +93,7 @@ private:
 	void SpawnStraightCorridor();
 	void SpawnCorridor(); // Common function, called from every previous functions to increase number of spawned corridors and to spawn corridor.
 	// Spawn rock
-	void SpawnObstacleRock();
+	void SpawnObstacleRock() const;
 
 	FTransform SpawnPointTransform; // Next spawn point location
 	TSubclassOf<ACorridor> CorridorToSpawn = NULL; // What kind of corridor will be spawned next
@@ -133,5 +131,6 @@ public:
 private:
 	// Calculate where should be spawned next corridor, if runner have to jump. Use projectile motion pattern
 	// Vx and Vy = will receive V0 with projectile motion pattern.
-	FORCEINLINE float GetDisplacement(float Vx, float Vy, float t, float Cos0) const { return  FMath::Sqrt(FMath::Pow(Vx, 2) + FMath::Pow(Vy, 2)) * t * Cos0;};
+	static
+	FORCEINLINE float GetDisplacement(const float Vx,const float Vy,const float t,const float Cos0) { return  FMath::Sqrt(FMath::Pow(Vx, 2) + FMath::Pow(Vy, 2)) * t * Cos0;};
 };

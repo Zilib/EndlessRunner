@@ -41,22 +41,19 @@ void ACorridor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Othe
 {
 	if (!GameInstance) { return; }
 
-	if (GameInstance && GameInstance->Runner == OtherActor)
+	if (GameInstance && GameInstance->Runner == OtherActor && !IsTimerActive)
 	{
 		// So player should move faster, after reach corridor
 		GameInstance->Runner->IncreaseSpeed();
 
 		// set timer and after X time destroy object, and spawned items thankfully this object.
-		if(!IsTimerActive)
-		{
-			IsTimerActive = true;
-			GetWorldTimerManager().SetTimer(TimeToDestroy, this, &ACorridor::DestroyObject, 4.0f, false);
-		}
+		IsTimerActive = true;
+		GetWorldTimerManager().SetTimer(TimeToDestroy, this, &ACorridor::DestroyObject, 4.0f, false);
 	}
 }
 
 // Kill a player when he hit a front wall
-void ACorridor::KillPlayer(AActor* Player)
+void ACorridor::KillPlayer(AActor* Player) const
 {
 	if (Player == GameInstance->Runner) // If overlapped actor it is a player
 	{
@@ -79,8 +76,5 @@ void ACorridor::DestroyObject()
 	{
 		SpawnedItem->Destroy();
 	}
-	if (IsValid(this))
-	{
 		Destroy();
-	}
 }

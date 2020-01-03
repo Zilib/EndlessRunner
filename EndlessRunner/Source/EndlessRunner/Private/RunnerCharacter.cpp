@@ -104,15 +104,15 @@ void ARunnerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	PlayerInputComponent->BindAxis("MoveRight", this, &ARunnerCharacter::MoveRight);
 }
 
-void ARunnerCharacter::TurnAtRate(float Rate)
+void ARunnerCharacter::TurnAtRate(const float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
 }
 
-void ARunnerCharacter::MoveForward(float Value)
+void ARunnerCharacter::MoveForward(const float Value)
 {
-	if ((Controller != NULL) && (Value != 0.0f))
+	if ((Controller != nullptr) && (Value != 0.0f))
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -125,7 +125,7 @@ void ARunnerCharacter::MoveForward(float Value)
 }
 
 // Check does player can turn right, he cannot run into a wall
-bool ARunnerCharacter::CanMoveRight(float Value)
+bool ARunnerCharacter::CanMoveRight(float Value) const
 {
 	TArray<AActor*> Actors; // Here is saved a overlapped actors
 	GetOverlappingActors(Actors, ACorridor::StaticClass());
@@ -167,9 +167,9 @@ bool ARunnerCharacter::CanMoveRight(float Value)
 	return true;
 }
 
-void ARunnerCharacter::MoveRight(float Value)
+void ARunnerCharacter::MoveRight(const float Value)
 {
-	if ((Controller != NULL) && (Value != 0.0f) && CanMoveRight(Value))
+	if ((Controller != nullptr) && (Value != 0.0f) && CanMoveRight(Value))
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -183,7 +183,7 @@ void ARunnerCharacter::MoveRight(float Value)
 }
 
 // Change a runner directory while he is running. Using only if you make an turn.
-void ARunnerCharacter::TurnARunner(float Value)
+void ARunnerCharacter::TurnARunner(const float Value) const
 {
 	if (Controller) // Turn a character, who is controlled by player. 
 	{

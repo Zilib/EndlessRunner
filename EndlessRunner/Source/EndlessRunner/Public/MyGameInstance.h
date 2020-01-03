@@ -8,8 +8,6 @@
 #include "RunnerCharacter.h"
 #include "MyGameInstance.generated.h"
 
-
-class ARunnerCharacter;
 /**
  * 
  */
@@ -89,7 +87,7 @@ public:
 
 	// Call into file, which is into data directory and is named "config.txt"
 	UFUNCTION(BlueprintCallable, Category = "Server")
-	FString GetServerIP();
+	static FString GetServerIP();
 private:
 	// Save here data which will be saved into Data array
 	FScoreBoard TemporaryData; 

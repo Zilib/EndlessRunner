@@ -4,11 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "MyGameInstance.h"
 #include "Components/AudioComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "RunnerCharacter.generated.h"
 
-class UParticleSystemComponent;
 class UMyGameInstance;
 
 UCLASS()
@@ -23,6 +22,8 @@ class ENDLESSRUNNER_API ARunnerCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+	
+	UMyGameInstance* GameInstance{ nullptr };
 public:
 	ARunnerCharacter();
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
@@ -46,7 +47,7 @@ public:
 
 	// Call to this, if you want to change hero director
 	UFUNCTION(BlueprintCallable)
-	void TurnARunner(float Value);
+	void TurnARunner(const float Value) const;
 
 	 // Return from pitagoras sqrt(pow(Vx,2) + pow(Vy,2))
 	float GetV0Velocity() const; 
@@ -70,10 +71,10 @@ public:
 	void IncreaseSpeed(); // Make level harder, and player will be faster
 protected:
 	/** Called for forwards/backward input */
-	void MoveForward(float Value);
+	void MoveForward(const float Value);
 
 	/** Called for side to side input */
-	void MoveRight(float Value);
+	void MoveRight(const float Value);
 	/**
 	 * Called via input to turn at a given rate.
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
@@ -86,7 +87,7 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	bool CanMoveRight(float Value); // Forbid player move into a wall
+	bool CanMoveRight(float Value) const; // Forbid player move into a wall
 private:
 	// Delay to call function "RestartLevel" to show menu, find how long is boom sound.
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
@@ -103,6 +104,4 @@ private:
 	float FallingMargin{ 200.0f }; // Margin of character falling, if runner doesn't jump he will be killed when he's getvelocity().z reach jumpZ velocity + falling margin
 
 	void RestartLevel(); // When player die, wait 1.5 sec and restart level
-
-	UMyGameInstance* GameInstance{ nullptr };
 };

@@ -5,6 +5,7 @@
 #include "Engine/StaticMeshActor.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
+#include "MyGameInstance.h"
 #include "Math/UnrealMathUtility.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/GameplayStatics.h"
@@ -68,17 +69,17 @@ void AMapSpawner::SpawnStraightCorridor()
 			// I am looking for max distance where i can reach max jump height
 			const float DistanceToReachMaxHeight = (RunnerHero->TimeToReachMaximumHeight() * CorridorDisplacement) / TotalFlightTime();
 
-			FVector SocketLocation = SpawnPointTransform.GetLocation();
-			FVector SocketRotationForward = SpawnPointTransform.GetRotation().GetForwardVector() * DistanceToReachMaxHeight;
-			FVector SocketRotationUp = SpawnPointTransform.GetRotation().GetUpVector() * (RunnerHero->GetMaxJumpHeight());
+			const FVector SocketLocation = SpawnPointTransform.GetLocation();
+			const FVector SocketRotationForward = SpawnPointTransform.GetRotation().GetForwardVector() * DistanceToReachMaxHeight;
+			const FVector SocketRotationUp = SpawnPointTransform.GetRotation().GetUpVector() * (RunnerHero->GetMaxJumpHeight());
 
 			SpawnPointTransform.SetLocation(SocketLocation + SocketRotationForward + SocketRotationUp);
 		}
 		else
 		{
 			/// Make distance greater
-			FVector SocketLocation = SpawnPointTransform.GetLocation();
-			FVector SocketRotationForward = SpawnPointTransform.GetRotation().GetForwardVector() * -(CorridorDisplacement); // TODO find an pattern for perfect distance depend of Vx 
+			const FVector SocketLocation = SpawnPointTransform.GetLocation();
+			const FVector SocketRotationForward = SpawnPointTransform.GetRotation().GetForwardVector() * -(CorridorDisplacement); // TODO find an pattern for perfect distance depend of Vx 
 			SpawnPointTransform.SetLocation(SocketLocation + SocketRotationForward);
 		}
 	}
@@ -203,7 +204,7 @@ void AMapSpawner::GenerateMap()
 // Random system, to make some obstacles.
 bool AMapSpawner::RandomGenerator(int Chance)
 {
-	int32 HitNumber = FMath::FRandRange(1, 100);
+	const int32 HitNumber = FMath::FRandRange(1, 100);
 	return HitNumber <= Chance;
 }
 
@@ -222,7 +223,7 @@ void AMapSpawner::Tick(float DeltaTime)
 }
 
 // Only work with straight corridor
-void AMapSpawner::SpawnObstacleRock()
+void AMapSpawner::SpawnObstacleRock() const
 {
 	int32 SpawnPointNumber = FMath::FRandRange(1, 99);
 	FTransform RockSpawnTransform;
@@ -268,5 +269,6 @@ void AMapSpawner::SpawnItem()
 		ItemToSpawn,
 		NextItemSpawnTransform
 	);
+	PreviousCorridor->SpawnedItem->SetCorridor(PreviousCorridor);
 	PreviousCorridor->SpawnedItem->SetGameInstance(GameInstance);
 }

@@ -6,9 +6,11 @@
 #include "GameFramework/Actor.h"
 #include "Components/AudioComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "MyGameInstance.h"
+#include "Corridor.h"
 #include "Coin.generated.h"
 
-class UMyGameInstance;
+class ACorridor;
 
 UCLASS()
 class ENDLESSRUNNER_API ACoin : public AActor
@@ -16,7 +18,7 @@ class ENDLESSRUNNER_API ACoin : public AActor
 	GENERATED_BODY()
 	
 protected:
-	virtual void BeginPlay();
+	virtual void BeginPlay() override;
 
 public:	
 	// Sets default values for this actor's properties
@@ -31,11 +33,13 @@ public:
 	UPROPERTY(BlueprintReadWrite,VisibleAnywhere, Category = "Setup")
 	UAudioComponent* SoundToSpawn{ nullptr };
 
-	void SetGameInstance(UMyGameInstance* GameInstance);
+	void SetGameInstance(UMyGameInstance* pGameInstance);
+	void SetCorridor(ACorridor* Corridor);
 private:
 	// Collect a item
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	UMyGameInstance* GameInstance;
+	UMyGameInstance* GameInstance{	nullptr	};
+	ACorridor* AttachedCorridor{ nullptr }; // Tell me, which object want to kill me
 };

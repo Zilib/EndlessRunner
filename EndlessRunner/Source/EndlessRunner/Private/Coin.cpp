@@ -2,8 +2,8 @@
 
 
 #include "Coin.h"
-#include "Engine/World.h"
 #include "MyGameInstance.h"
+#include "Corridor.h"
 #include "GameFramework/Actor.h"
 #include "Engine/StaticMesh.h"
 
@@ -45,11 +45,18 @@ void ACoin::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 
 		SoundToSpawn->Play(); // Coin is collected, give sound!
 
+		AttachedCorridor->SpawnedItem = nullptr; // Tell him, that i am died... He do not must me kill me, because i am died
+		
 		Destroy(); // Now destroy it, it is not necessary any more
 	}
 }
 // Avoid to cast redundants
-void ACoin::SetGameInstance(UMyGameInstance* GameInstance)
+void ACoin::SetGameInstance(UMyGameInstance* pGameInstance)
 {
-	this->GameInstance = GameInstance;
+	GameInstance = pGameInstance;
+}
+
+void ACoin::SetCorridor(ACorridor* Corridor)
+{
+	AttachedCorridor = Corridor;
 }

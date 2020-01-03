@@ -47,7 +47,11 @@ void ACorridor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Othe
 		GameInstance->Runner->IncreaseSpeed();
 
 		// set timer and after X time destroy object, and spawned items thankfully this object.
-		GetWorldTimerManager().SetTimer(TimeToDestroy, this, &ACorridor::DestroyObject, 4.0f, false);
+		if(!IsTimerActive)
+		{
+			IsTimerActive = true;
+			GetWorldTimerManager().SetTimer(TimeToDestroy, this, &ACorridor::DestroyObject, 4.0f, false);
+		}
 	}
 }
 
@@ -75,7 +79,7 @@ void ACorridor::DestroyObject()
 	{
 		SpawnedItem->Destroy();
 	}
-	if (this)
+	if (IsValid(this))
 	{
 		Destroy();
 	}

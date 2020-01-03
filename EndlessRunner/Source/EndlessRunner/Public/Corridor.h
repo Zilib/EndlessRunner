@@ -53,4 +53,6 @@ private:
 	// Kill a player when he hit a front wall
 	UFUNCTION(BlueprintCallable) 
 	void KillPlayer(AActor* Player);
+
+	bool IsTimerActive{ false }; // Check does timer which is responsible for destroy object is active.
 };

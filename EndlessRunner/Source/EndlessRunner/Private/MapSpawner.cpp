@@ -178,7 +178,6 @@ void AMapSpawner::GenerateMap()
 	if (RunnerHero->GetVelocity() == FVector(0,0,0)) { return; } // Spawn whenever player is moving. Don't spawn to much objects when it is not necessary
 
 	// Player Speed is Vx, and RunnerJumpZVelocity is Vy it is equal to V0
-	UE_LOG(LogTemp, Warning, TEXT("%f"), GameInstance->PlayerSpeed);
 	CorridorDisplacement = GetDisplacement(
 		GameInstance->PlayerSpeed,
 		RunnerHero->GetJumpZVelocity(),

@@ -37,13 +37,19 @@ void ACoin::BeginPlay()
 
 void ACoin::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor->GetName() == Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName)
+	// If gameinstance exists and overlapped actor is equal to player hero. Only one hero in the game, so only check his name.
+	if (GameInstance && GameInstance->Runner == OtherActor)
 	{
 		// Increase number of collected items
-		Cast<UMyGameInstance>(GetGameInstance())->CollectedItem++;
+		GameInstance->CollectedItem++;
 
-		SoundToSpawn->Play(); // Coin is collected give sound!
+		SoundToSpawn->Play(); // Coin is collected, give sound!
 
-		Destroy();
+		Destroy(); // Now destroy it, it is not necessary any more
 	}
+}
+// Avoid to cast redundants
+void ACoin::SetGameInstance(UMyGameInstance* GameInstance)
+{
+	this->GameInstance = GameInstance;
 }

@@ -29,7 +29,9 @@ void ACorridor::BeginPlay()
 	TriggerDestroy->OnComponentBeginOverlap.AddDynamic(this, &ACorridor::OnOverlapBegin);
 
 	// Tell game, player will be faster, so game must know how fast player will when he will reach next corridor to change displacement
-	if (UMyGameInstance * GameInstance = Cast<UMyGameInstance>(GetGameInstance()))
+	GameInstance = Cast<UMyGameInstance>(GetGameInstance());
+
+	if (GameInstance)
 	{
 		GameInstance->IncreaseSpeed();
 	}
@@ -37,19 +39,13 @@ void ACorridor::BeginPlay()
 
 void ACorridor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (!Cast<UMyGameInstance>(GetGameInstance())) { return; }
+	if (!GameInstance) { return; }
 
-	// Increase player speed after reach corridor
-	if (ARunnerCharacter* Player = Cast<ARunnerCharacter>(OtherActor))
+	if (GameInstance && GameInstance->Runner == OtherActor)
 	{
-		// Make player run faster
-		Player->IncreaseSpeed();
-	}
+		// So player should move faster, after reach corridor
+		GameInstance->Runner->IncreaseSpeed();
 
-	// If collision is with hero
-	if (OtherActor->GetName() == Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName)
-	{
-		FTimerHandle TimeToDestroy;
 		// set timer and after X time destroy object, and spawned items thankfully this object.
 		GetWorldTimerManager().SetTimer(TimeToDestroy, this, &ACorridor::DestroyObject, 4.0f, false);
 	}
@@ -58,12 +54,12 @@ void ACorridor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Othe
 // Kill a player when he hit a front wall
 void ACorridor::KillPlayer(AActor* Player)
 {
-	if (ARunnerCharacter* Runner = Cast<ARunnerCharacter>(Player))
+	if (Player == GameInstance->Runner) // If overlapped actor it is a player
 	{
 		// If player cannot jump, he is in the air. So he hit the wall during he jump. That is a reason to kill him! And forbidd play anymore
-		if (!Runner->CanJump()) 
+		if (!GameInstance->Runner->CanJump()) 
 		{
-			Runner->KillARunner();
+			GameInstance->Runner->KillARunner(); // We know, runner overlapped so we can use pointer to get his position in memory and destroy him
 		}
 	}
 }
@@ -75,7 +71,7 @@ void ACorridor::DestroyObject()
 	{
 		SpawnedObstacleRock->Destroy();
 	}
-	if (IsValid(SpawnedItem))
+	if (IsValid(SpawnedItem)) // If item is not collected
 	{
 		SpawnedItem->Destroy();
 	}

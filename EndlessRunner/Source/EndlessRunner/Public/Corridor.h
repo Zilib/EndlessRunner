@@ -6,16 +6,19 @@
 #include "TimerManager.h"
 #include "Components/BoxComponent.h"
 #include "Coin.h"
+#include "InterfaceStructs.h"
 #include "RunnerCharacter.h"
 #include "Corridor.generated.h"
 
 class AObstacle;
+class UMyGameInstance;
 
 UCLASS()
 class ENDLESSRUNNER_API ACorridor : public AActor
 {
 	GENERATED_BODY()
-	
+
+	UMyGameInstance* GameInstance{ nullptr };
 public:	
 	// Sets default values for this actor's properties
 	ACorridor();
@@ -45,9 +48,8 @@ private:
 	// After begin overlap wait 3 second and destroy this element. 
 	void DestroyObject();
 
-	// Every will destroy after 1 sec of begin overlap. It handle time of it
-	FTimerHandle Handler;
-
+	// Time untill destroy an object
+	FTimerHandle TimeToDestroy;
 	// Kill a player when he hit a front wall
 	UFUNCTION(BlueprintCallable) 
 	void KillPlayer(AActor* Player);

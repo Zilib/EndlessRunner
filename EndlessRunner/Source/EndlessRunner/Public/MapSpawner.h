@@ -17,7 +17,7 @@ UCLASS()
 class ENDLESSRUNNER_API AMapSpawner : public AActor
 {
 	GENERATED_BODY()
-	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

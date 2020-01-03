@@ -269,4 +269,5 @@ void AMapSpawner::SpawnItem()
 		ItemToSpawn,
 		NextItemSpawnTransform
 	);
+	PreviousCorridor->SpawnedItem->SetGameInstance(GameInstance);
 }

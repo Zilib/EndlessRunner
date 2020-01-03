@@ -66,9 +66,13 @@ void ARunnerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Set character name, to allow check other comp does they collised with your hero
-	Cast<UMyGameInstance>(GetGameInstance())->RunnerBPName = GetName();
-	Cast<UMyGameInstance>(GetGameInstance())->PlayerSpeed = GetCharacterMovement()->MaxWalkSpeed; // Save start player speed
+	GameInstance = Cast<UMyGameInstance>(GetGameInstance());
+	// Tell instance that you are an hero!
+	if (GameInstance)
+	{
+		GameInstance->Runner = this;
+		GameInstance->PlayerSpeed = GetCharacterMovement()->MaxWalkSpeed; // Save start player speed
+	}
 	// Because game is not started, player cannot move
 	GetCharacterMovement()->SetActive(false);
 }

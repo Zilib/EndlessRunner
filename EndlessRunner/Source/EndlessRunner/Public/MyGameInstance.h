@@ -5,8 +5,11 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "InterfaceStructs.h" 
+#include "RunnerCharacter.h"
 #include "MyGameInstance.generated.h"
 
+
+class ARunnerCharacter;
 /**
  * 
  */
@@ -27,9 +30,9 @@ public:
 	// Clear all variables, prepare level for start
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void ClearLevelData();
-	// To check does overlap actor is main hero
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Setup")
-	FString RunnerBPName;
+
+	// Save here player character, whole game is communicating thankfully by this instance
+	ARunnerCharacter* Runner{ nullptr };
 
 	// Name which will be visible in UI
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Setup")

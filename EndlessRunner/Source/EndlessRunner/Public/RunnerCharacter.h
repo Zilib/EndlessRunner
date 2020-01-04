@@ -103,5 +103,12 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	float FallingMargin{ 200.0f }; // Margin of character falling, if runner doesn't jump he will be killed when he's getvelocity().z reach jumpZ velocity + falling margin
 
-	void RestartLevel(); // When player die, wait 1.5 sec and restart level
+	void RestartLevel() const; // When player die, wait 1.5 sec and restart level
+
+	// Here is everything about color changing,
+	int32 OverlapsToGetMaxSpeed{ 0 }; // How much overlaps do we need to reach max speed
+	float ValueToColor{ 0.0f }; // We need to know how much numbers is necessary to add to reach red color when player reach max speed (255,0,0)
+	float CurrentRedValue{ 0.0f };
+	void ChangePlayerColor();
+	
 };

@@ -6,11 +6,12 @@
 #include "GameFramework/Actor.h"
 #include "Components/AudioComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "MyGameInstance.h"
-#include "Corridor.h"
 #include "Coin.generated.h"
 
 class ACorridor;
+class UMyGameInstance;
+class UStaticMeshComponent;
+class UCapsuleComponent;
 
 UCLASS()
 class ENDLESSRUNNER_API ACoin : public AActor

@@ -12,10 +12,12 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Math/UnrealMathUtility.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/Character.h"
 #include "Math/Vector.h"
 #include "Corridor.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AEndlessRunnerCharacter
@@ -72,6 +74,10 @@ void ARunnerCharacter::BeginPlay()
 	{
 		GameInstance->Runner = this;
 		GameInstance->PlayerSpeed = GetCharacterMovement()->MaxWalkSpeed; // Save start player speed
+		// I need to divide difference of speeds to get overlaps, how much speed do i need to reach max speed, my start speed do not must be an 0 value
+		OverlapsToGetMaxSpeed = (GameInstance->MaxPlayerSpeed - GameInstance->PlayerSpeed)/ GameInstance->Acceleration;
+		// I am looking for a number where X * OverlapsToGetMaxSpeed = 255
+		ValueToColor = float(1) / float(OverlapsToGetMaxSpeed); // Colors works only with integers, so make it work!
 	}
 	// Because game is not started, player cannot move
 	GetCharacterMovement()->SetActive(false);
@@ -260,15 +266,34 @@ void ARunnerCharacter::IncreaseSpeed()
 {
 	if (UMyGameInstance* GInstance = Cast<UMyGameInstance>(GetGameInstance()))
 	{
-		// Increase playerspeed by Acceleration defined in the game instance
+		// Increase player speed by Acceleration defined in the game instance
 		if (GetCharacterMovement()->MaxWalkSpeed + GInstance->Acceleration <= GInstance->MaxPlayerSpeed)
 		{
 			GetCharacterMovement()->MaxWalkSpeed += GInstance->Acceleration;
 		}
+		if (CurrentRedValue < 1)
+		{
+			ChangePlayerColor();
+		}
 	}
 }
-
-void ARunnerCharacter::RestartLevel()
+// Restart player level
+void ARunnerCharacter::RestartLevel() const
 {
 	UGameplayStatics::OpenLevel(GetWorld(), FName("Level1")); // Now restart everything
 }
+
+void ARunnerCharacter::ChangePlayerColor()
+{
+	if(CurrentRedValue + ValueToColor <= 1)
+	{
+		CurrentRedValue += ValueToColor;
+		GetMesh()->SetVectorParameterValueOnMaterials(FName("BodyColor"), FVector(CurrentRedValue, 0, 0));
+	}
+	else if (CurrentRedValue + ValueToColor > 1 && CurrentRedValue != 1)
+	{
+		CurrentRedValue = 1;
+		GetMesh()->SetVectorParameterValueOnMaterials(FName("BodyColor"), FVector(CurrentRedValue, 0, 0));
+	}
+}
+

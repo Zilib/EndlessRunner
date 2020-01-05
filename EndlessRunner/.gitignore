@@ -77,4 +77,6 @@ Content/StarterContent
 Content/Imported
 Content/MaterControlMaterial
 Content/MovedStarterContent
+Source/EndlessRunner/Private/SecureCPP.cpp
+Source/EndlessRunner/Public/SecureCPP.h
 # Cache files for the editor to use

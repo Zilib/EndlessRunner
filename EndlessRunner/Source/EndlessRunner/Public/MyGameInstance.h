@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "InterfaceStructs.h" 
+#include "InterfaceStructs.h"
+#include "SecureCPP.h"
 #include "RunnerCharacter.h"
 #include "MyGameInstance.generated.h"
 
@@ -79,7 +80,7 @@ public:
 /// Getters 
 	// Get a copy of FScoreBoard table, to show it on the screen
 	UFUNCTION(BlueprintCallable, Category = "TData")
-	FORCEINLINE TArray<FScoreBoard> GetData() { return Data; }
+	FORCEINLINE TArray<FScoreBoard> GetData() const { return Data; }
 
 	// Get game version
 	UFUNCTION(BlueprintCallable, Category = "Setup")
@@ -96,5 +97,28 @@ private:
 	TArray<FScoreBoard> Data; 
 
 	// Set game version, can be changed only in the code.
-	FString GameVersion{ "1.0" }; 
+	FString GameVersion{ "1.0" };
+
+	// Here are every information to connect with database send there data. SecureCPP is will be not send to github
+	UFUNCTION(BlueprintCallable, Category = "Database data")
+	FORCEINLINE FString ScoreBoardURL() const { return DBInformation.GetScoreboardURL(); }
+
+	UFUNCTION(BlueprintCallable, Category= "Database data")
+	FORCEINLINE FString SaveURL() const { return DBInformation.GetSaveDataURL(); }
+
+	UFUNCTION(BlueprintCallable, Category = "Database data")
+	FORCEINLINE FString SaveUsername() const { return DBInformation.GetScoreUser(); }
+
+	UFUNCTION(BlueprintCallable, Category = "Database data")
+	FORCEINLINE FString SavePassword() const { return DBInformation.GetScorePassword(); }
+
+	UFUNCTION(BlueprintCallable, Category = "Database data")
+	FORCEINLINE FString GetPasswordField() const { return DBInformation.GetPasswordField(); }
+	
+	UFUNCTION(BlueprintCallable, Category = "Database data")
+	FORCEINLINE FString UsernameField() const { return DBInformation.GetUsernameField(); }
+
+	UFUNCTION(BlueprintCallable, Category = "Database data")
+	FORCEINLINE FString GetVersionUrl() const { return DBInformation.GetVersionURL(); }
+	SecureCPP DBInformation;
 };

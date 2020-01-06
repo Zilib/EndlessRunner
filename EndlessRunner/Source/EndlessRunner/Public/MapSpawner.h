@@ -27,7 +27,7 @@ private:
 
 	// Need for calculate maximum jump distance and height. For estimate an obscales difficulty level
 	UPROPERTY(EditAnywhere)
-	ARunnerCharacter* RunnerHero{ nullptr };
+	ARunnerCharacter* Player{ nullptr };
 
 	// Here i will hold a new object, for get next spawn location.
 	// Firstly you need to give me a first object, because i do not know where should i spawn next object
@@ -96,17 +96,17 @@ private:
 	void SpawnObstacleRock() const;
 
 	FTransform SpawnPointTransform; // Next spawn point location
-	TSubclassOf<ACorridor> CorridorToSpawn = NULL; // What kind of corridor will be spawned next
+	TSubclassOf<ACorridor> CorridorToSpawn; // What kind of corridor will be spawned next
 
-	void SpawnItem(); // Spawn coin
+	void SpawnItem() const; // Spawn coin
 
 	// Item spawner
 	UPROPERTY(EditAnywhere, Category = "Item spawner")
-	TSubclassOf<ACoin> ItemToSpawn; // Select "coin" class
+	TSubclassOf<AItem> ItemToSpawn; // Select "coin" class
 
 	// Multiply every collected bottle by this value and add it to score
 	UPROPERTY(EditAnywhere, Category = "Item spawner")
-	int32 ItemValue {100};
+	int32 ItemValue { 100 };
 
 	UPROPERTY(EditAnywhere, Category = "Game")
 	float Acceleration{ 10.0f }; // After overlap corridor, increase player speed by this value

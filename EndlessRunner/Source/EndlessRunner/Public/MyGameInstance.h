@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "InterfaceStructs.h"
+#include "GameStructsAndEnums.h"
 #include "SecureCPP.h"
 #include "RunnerCharacter.h"
 #include "MyGameInstance.generated.h"
@@ -31,7 +31,7 @@ public:
 	void ClearLevelData();
 
 	// Save here player character, whole game is communicating thankfully by this instance
-	ARunnerCharacter* Runner{ nullptr };
+	ARunnerCharacter* Player{ nullptr };
 
 	// Name which will be visible in UI
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Setup")
@@ -39,7 +39,7 @@ public:
 
 	// When player get a item, collect it here!
 	UPROPERTY(BlueprintReadWrite, Category = "Game Statistics")
-	int32 CollectedItem{ 0 }; 
+	int32 CollectedItems{ 0 }; 
 
 	// When player is running he is making an distance! Save here his last done distance.
 	UPROPERTY(BlueprintReadWrite, Category = "Game Statistics")
@@ -51,7 +51,7 @@ public:
 
 	// Pattern: TraveledDistance / 33 + CollectedItem * ItemValue
 	UFUNCTION(BlueprintCallable, Category = "Game Statistics")
-	FORCEINLINE int32 GetScore() const { return (TraveledDistance / 33) + CollectedItem * ItemValue; }
+	FORCEINLINE int32 GetScore() const { return (TraveledDistance / 33) + CollectedItems * ItemValue; }
 
 	// Return traveled distance in meters
 	UFUNCTION(BlueprintCallable, Category = "Game Statistics")
@@ -62,63 +62,56 @@ public:
 	EActiveBoard ActiveBoard{ EActiveBoard::GMainMenu };
 /// Setters
 	// Save temporary player name to then save it to proper variable
-	UFUNCTION(BlueprintCallable, Category = "TData")
-	void SetPlayerName(FString PlayerName);
+	UFUNCTION(BlueprintCallable, Category = "Scoreboard Data")
+	void SetRecordPlayerName(FString PlayerName);
 
 	// Save temporary temporary score to then save it to proper variable
-	UFUNCTION(BlueprintCallable, Category = "TData")
-	void SetScore(int32 Score);
+	UFUNCTION(BlueprintCallable, Category = "Scoreboard Data")
+	void SetRecordScore(int32 Score);
 
 	// Clear temporary array, it is a prepare before get a new data.
-	UFUNCTION(BlueprintCallable, Category = "TData")
+	UFUNCTION(BlueprintCallable, Category = "Scoreboard Data")
 	void ClearTemporaryArray();
 
-	// Now save all data into a array
-	UFUNCTION(BlueprintCallable)
-	void AddToData();
+	// Here are stored table records, which you can see after click scoreboard.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Scoreboard Data")
+	TArray<FScoreBoard> CurrentScoreData;
 
+	// Save here data which will be saved into Data array
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Scoreboard Data")
+	FScoreBoard RecordData;
 /// Getters 
-	// Get a copy of FScoreBoard table, to show it on the screen
-	UFUNCTION(BlueprintCallable, Category = "TData")
-	FORCEINLINE TArray<FScoreBoard> GetData() const { return Data; }
-
 	// Get game version
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	FORCEINLINE	FString GetGameVersion() const { return GameVersion; }
-
+	
 	// Call into file, which is into data directory and is named "config.txt"
 	UFUNCTION(BlueprintCallable, Category = "Server")
 	static FString GetServerIP();
 private:
-	// Save here data which will be saved into Data array
-	FScoreBoard TemporaryData; 
-
-	// Here are stored table records, which you can see after click scoreboard.
-	TArray<FScoreBoard> Data; 
-
 	// Set game version, can be changed only in the code.
 	FString GameVersion{ "1.0" };
 
 	// Here are every information to connect with database send there data. SecureCPP is will be not send to github
 	UFUNCTION(BlueprintCallable, Category = "Database data")
-	FORCEINLINE FString ScoreBoardURL() const { return DBInformation.GetScoreboardURL(); }
-
-	UFUNCTION(BlueprintCallable, Category= "Database data")
-	FORCEINLINE FString SaveURL() const { return DBInformation.GetSaveDataURL(); }
+	FORCEINLINE FString GetUsernameFieldValue() const { return DBInformation.UsernameFieldValue; }
 
 	UFUNCTION(BlueprintCallable, Category = "Database data")
-	FORCEINLINE FString SaveUsername() const { return DBInformation.GetScoreUser(); }
+	FORCEINLINE FString GetPasswordFieldValue() const { return DBInformation.PasswordFieldValue; }
 
 	UFUNCTION(BlueprintCallable, Category = "Database data")
-	FORCEINLINE FString SavePassword() const { return DBInformation.GetScorePassword(); }
-
-	UFUNCTION(BlueprintCallable, Category = "Database data")
-	FORCEINLINE FString GetPasswordField() const { return DBInformation.GetPasswordField(); }
+	FORCEINLINE FString GetPasswordFieldName() const { return DBInformation.PasswordFieldName; }
 	
 	UFUNCTION(BlueprintCallable, Category = "Database data")
-	FORCEINLINE FString UsernameField() const { return DBInformation.GetUsernameField(); }
+	FORCEINLINE FString GetUsernameFieldName() const { return DBInformation.UsernameFieldName; }
 
 	UFUNCTION(BlueprintCallable, Category = "Database data")
-	FORCEINLINE FString GetVersionUrl() const { return DBInformation.GetVersionURL(); }
+	FORCEINLINE FString ScoreBoardURL() const { return DBInformation.GameScoreBoardURL; }
+
+	UFUNCTION(BlueprintCallable, Category = "Database data")
+	FORCEINLINE FString SaveURL() const { return DBInformation.GameSaveDataURL; }
+
+	UFUNCTION(BlueprintCallable, Category = "Database data")
+	FORCEINLINE FString GetVersionUrl() const { return DBInformation.GameVersionURL; }
 	SecureCPP DBInformation;
 };

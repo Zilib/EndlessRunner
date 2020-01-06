@@ -11,31 +11,26 @@
 // If you do not wanna see a save score btn, or you want to reset statistics use it
 void UMyGameInstance::ClearLevelData()
 {
-	CollectedItem = 0;
+	CollectedItems = 0;
 	TraveledDistance = 0;
 }
 
 // Save player name into a variable
-void UMyGameInstance::SetPlayerName(FString PlayerName)
+void UMyGameInstance::SetRecordPlayerName(FString PlayerName)
 {
-	TemporaryData.PlayerName = PlayerName;
+	RecordData.PlayerName = PlayerName;
 }
 
 // Save score into a variable
-void UMyGameInstance::SetScore(int32 Score)
+void UMyGameInstance::SetRecordScore(int32 Score)
 {
-	TemporaryData.Score = Score;
+	RecordData.Score = Score;
 }
 
 // Clear temporary data, i never want to double my results.
 void UMyGameInstance::ClearTemporaryArray()
 {
-	Data.Empty();
-}
-
-void UMyGameInstance::AddToData()
-{
-	Data.Add(TemporaryData);
+	CurrentScoreData.Empty();
 }
 
 void UMyGameInstance::IncreaseSpeed()

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InterfaceStructs.generated.h"
+#include "GameStructsAndEnums.generated.h"
 /**
  * 
  */

@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Components/BoxComponent.h"
-#include "Coin.h"
+#include "Item.h"
 #include "Obstacle.h"
 #include "MyGameInstance.h"
 #include "RunnerCharacter.h"
 #include "Corridor.generated.h"
 
-class ACoin;
+class AItem;
 
 UCLASS()
 class ENDLESSRUNNER_API ACorridor : public AActor
@@ -34,16 +34,15 @@ public:
 	// Only keep to destroy this in the future. Destroy it with corridor
 	AObstacle* SpawnedObstacleRock{ nullptr };
 
-	ACoin* SpawnedItem{ nullptr };
+	AItem* SpawnedItem{ nullptr };
 	// After begin overlap wait 3 second and destroy this element. 
-	 void DestroyObject();
+	void DestroyObject();
 protected:
 	// Called when the game starts or when spawned
 	void BeginPlay() override;
 
-	/// Basiclly only for destory objects
 	UFUNCTION()
-	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	virtual void DestroyOnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 private:
 
@@ -51,7 +50,7 @@ private:
 	FTimerHandle TimeToDestroy;
 	// Kill a player when he hit a front wall
 	UFUNCTION(BlueprintCallable) 
-	void KillPlayer(AActor* Player) const;
+	void KillPlayer(AActor* OverlappedActor) const;
 
-	bool IsTimerActive{ false }; // Check does timer which is responsible for destroy object is active.
+	bool IsDestroyTimerActive{ false };
 };

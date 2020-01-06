@@ -72,7 +72,7 @@ void ARunnerCharacter::BeginPlay()
 	// Tell instance that you are an hero!
 	if (GameInstance)
 	{
-		GameInstance->Runner = this;
+		GameInstance->Player = this;
 		GameInstance->PlayerSpeed = GetCharacterMovement()->MaxWalkSpeed; // Save start player speed
 		// I need to divide difference of speeds to get overlaps, how much speed do i need to reach max speed, my start speed do not must be an 0 value
 		OverlapsToGetMaxSpeed = (GameInstance->MaxPlayerSpeed - GameInstance->PlayerSpeed)/ GameInstance->Acceleration;
@@ -95,7 +95,7 @@ void ARunnerCharacter::Tick(float DeltaSeconds)
 	// If character is going down, he cannot reach more speed than JumpZVelocity, each one obstacle is not spawn below him
 	if (abs(GetVelocity().Z) > GetCharacterMovement()->JumpZVelocity + FallingMargin)
 	{
-		KillARunner();
+		KillAPlayer();
 	}
 }
 //////////////////////////////////////////////////////////////////////////
@@ -133,11 +133,11 @@ void ARunnerCharacter::MoveForward(const float Value)
 // Check does player can turn right, he cannot run into a wall
 bool ARunnerCharacter::CanMoveRight(float Value) const
 {
-	TArray<AActor*> Actors; // Here is saved a overlapped actors
-	GetOverlappingActors(Actors, ACorridor::StaticClass());
-	if (Actors.Num() > 0) // If the array is empty, it means that mean runner does not overlap anything
+	TArray<AActor*> OverlappedActors;
+	GetOverlappingActors(OverlappedActors, ACorridor::StaticClass());
+	if (OverlappedActors.Num() > 0) // If the array is empty, it means that mean runner does not overlap anything
 	{
-		for (const auto& Actor : Actors) // For every overlaped  actor
+		for (const auto& Actor : OverlappedActors) // For every overlaped  actor
 		{
 			// Corridor where actually player is.
 			ACorridor* pCurrentCorridor = Cast<ACorridor>(Actor); // Get corridor
@@ -240,7 +240,7 @@ float ARunnerCharacter::GetMaxWalkSpeed() const
 	return GetCharacterMovement()->MaxWalkSpeed;
 }
 // Kill a runner, make boom restart statistics, and go into a main menu.
-void ARunnerCharacter::KillARunner()
+void ARunnerCharacter::KillAPlayer()
 {
 	if (GetController())
 	{

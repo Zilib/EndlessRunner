@@ -40,8 +40,8 @@ void AMapSpawner::BeginPlay()
 // Calculate total jump flight time.
 float AMapSpawner::TotalFlightTime() const
 {
-	const float V0 = RunnerHero->GetV0Velocity();
-	return  (2 * V0 * RunnerHero->GetSin()) / GetWorld()->GetGravityZ() * -1;
+	const float V0 = Player->GetV0Velocity();
+	return  (2 * V0 * Player->GetSin()) / GetWorld()->GetGravityZ() * -1;
 }
 
 // Separately functions for every corridor
@@ -67,11 +67,11 @@ void AMapSpawner::SpawnStraightCorridor()
 		if (RandomGenerator(ChanceToJump))
 		{
 			// I am looking for max distance where i can reach max jump height
-			const float DistanceToReachMaxHeight = (RunnerHero->TimeToReachMaximumHeight() * CorridorDisplacement) / TotalFlightTime();
+			const float DistanceToReachMaxHeight = (Player->TimeToReachMaximumHeight() * CorridorDisplacement) / TotalFlightTime();
 
 			const FVector SocketLocation = SpawnPointTransform.GetLocation();
 			const FVector SocketRotationForward = SpawnPointTransform.GetRotation().GetForwardVector() * DistanceToReachMaxHeight;
-			const FVector SocketRotationUp = SpawnPointTransform.GetRotation().GetUpVector() * (RunnerHero->GetMaxJumpHeight());
+			const FVector SocketRotationUp = SpawnPointTransform.GetRotation().GetUpVector() * (Player->GetMaxJumpHeight());
 
 			SpawnPointTransform.SetLocation(SocketLocation + SocketRotationForward + SocketRotationUp);
 		}
@@ -112,19 +112,19 @@ void AMapSpawner::SpawnTurnRightCorridor()
 		if (RandomGenerator(ChanceToJump))
 		{
 			// I am looking for max distance where i can reach max jump height
-			const float DistanceToReachMaxHeight = (RunnerHero->TimeToReachMaximumHeight() * CorridorDisplacement) / TotalFlightTime();
+			const float DistanceToReachMaxHeight = (Player->TimeToReachMaximumHeight() * CorridorDisplacement) / TotalFlightTime();
 
-			FVector SocketLocation = SpawnPointTransform.GetLocation();
-			FVector SocketRotationForward = SpawnPointTransform.GetRotation().GetRightVector() * -DistanceToReachMaxHeight;
-			FVector SocketRotationUp = SpawnPointTransform.GetRotation().GetUpVector() * (RunnerHero->GetMaxJumpHeight());
+			const FVector SocketLocation = SpawnPointTransform.GetLocation();
+			const FVector SocketRotationForward = SpawnPointTransform.GetRotation().GetRightVector() * -DistanceToReachMaxHeight;
+			const FVector SocketRotationUp = SpawnPointTransform.GetRotation().GetUpVector() * (Player->GetMaxJumpHeight());
 
 			SpawnPointTransform.SetLocation(SocketLocation + SocketRotationForward + SocketRotationUp);
 		}
 		else
 		{
 			/// Make distance greater
-			FVector SocketLocation = SpawnPointTransform.GetLocation();
-			FVector SocketRotation = SpawnPointTransform.GetRotation().GetRightVector() * CorridorDisplacement;
+			const FVector SocketLocation = SpawnPointTransform.GetLocation();
+			const FVector SocketRotation = SpawnPointTransform.GetRotation().GetRightVector() * CorridorDisplacement;
 			SpawnPointTransform.SetLocation(SocketLocation + SocketRotation);
 			//SpawnPointTransform.AddToTranslation(FVector(-DistanceObstacle(), 0, 0));
 		}
@@ -152,19 +152,19 @@ void AMapSpawner::SpawnTurnLeftCorridor()
 		if (RandomGenerator(ChanceToJump))
 		{
 			// I am looking for max distance where i can reach max jump height
-			const float DistanceToReachMaxHeight = (RunnerHero->TimeToReachMaximumHeight() * CorridorDisplacement) / TotalFlightTime();
+			const float DistanceToReachMaxHeight = (Player->TimeToReachMaximumHeight() * CorridorDisplacement) / TotalFlightTime();
 
-			FVector SocketLocation = SpawnPointTransform.GetLocation();
-			FVector SocketRotationForward = SpawnPointTransform.GetRotation().GetForwardVector() * DistanceToReachMaxHeight;
-			FVector SocketRotationUp = SpawnPointTransform.GetRotation().GetUpVector() * (RunnerHero->GetMaxJumpHeight());
+			const FVector SocketLocation = SpawnPointTransform.GetLocation();
+			const FVector SocketRotationForward = SpawnPointTransform.GetRotation().GetForwardVector() * DistanceToReachMaxHeight;
+			const FVector SocketRotationUp = SpawnPointTransform.GetRotation().GetUpVector() * (Player->GetMaxJumpHeight());
 
 			SpawnPointTransform.SetLocation(SocketLocation + SocketRotationForward + SocketRotationUp);
 		}
 		else
 		{
 			/// Make distance greater
-			FVector SocketLocation = SpawnPointTransform.GetLocation();
-			FVector SocketRotation = SpawnPointTransform.GetRotation().GetForwardVector() * -CorridorDisplacement;
+			const FVector SocketLocation = SpawnPointTransform.GetLocation();
+			const FVector SocketRotation = SpawnPointTransform.GetRotation().GetForwardVector() * -CorridorDisplacement;
 			SpawnPointTransform.SetLocation(SocketLocation + SocketRotation);
 		}
 	}
@@ -176,13 +176,13 @@ void AMapSpawner::SpawnTurnLeftCorridor()
 
 void AMapSpawner::GenerateMap()
 {
-	if (RunnerHero->GetVelocity() == FVector(0,0,0)) { return; } // Spawn whenever player is moving. Don't spawn to much objects when it is not necessary
+	if (Player && Player->GetVelocity() == FVector(0,0,0)) { return; } // Spawn whenever player is moving. Don't spawn to much objects when it is not necessary
 
 	// Player Speed is Vx, and RunnerJumpZVelocity is Vy it is equal to V0
 	CorridorDisplacement = GetDisplacement(
 		GameInstance->PlayerSpeed,
-		RunnerHero->GetJumpZVelocity(),
-		TotalFlightTime(), RunnerHero->GetCos()) - DisplacementMarginValue;
+		Player ->GetJumpZVelocity(),
+		TotalFlightTime(), Player->GetCos()) - DisplacementMarginValue;
 
 	// Spawn turn left corridor, let him take a good velocity.
 	if (RandomGenerator(ChanceToTurnLeft)
@@ -213,7 +213,7 @@ void AMapSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// Is spawned enought, player will not see spawning system, now let's protect his memory
+	// Is spawned enough, player will not see spawning system, now let's protect his memory
 	if (SpawnedCorridors >= StartToSpawnCorridor && !NextDelayTimeActive)
 	{
 		NextDelayTimeActive = true; // Spawned corridors can be faster than CPU, so that is for protect
@@ -247,7 +247,7 @@ void AMapSpawner::SpawnObstacleRock() const
 	);
 }
 
-void AMapSpawner::SpawnItem()
+void AMapSpawner::SpawnItem() const
 {
 	int32 SocketNumber = FMath::FRandRange(1,3); // Item can be only spawned in 3 places, so make random choice.
 	FTransform NextItemSpawnTransform; // Here will be next spawn transform
@@ -265,7 +265,7 @@ void AMapSpawner::SpawnItem()
 	{
 		NextItemSpawnTransform = PreviousCorridor->CorridorMesh->GetSocketTransform(FName("SpawnPointItem3")); // Spawn at right side
 	}
-	PreviousCorridor->SpawnedItem = GetWorld()->SpawnActor<ACoin>(
+	PreviousCorridor->SpawnedItem = GetWorld()->SpawnActor<AItem>(
 		ItemToSpawn,
 		NextItemSpawnTransform
 	);

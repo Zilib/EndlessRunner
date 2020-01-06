@@ -66,7 +66,7 @@ public:
 
 	// Kill a runner
 	UFUNCTION(BlueprintCallable)
-	void KillARunner();
+	void KillAPlayer();
 
 	void IncreaseSpeed(); // Make level harder, and player will be faster
 protected:

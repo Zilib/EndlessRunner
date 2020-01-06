@@ -1,14 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Coin.h"
+#include "Item.h"
 #include "MyGameInstance.h"
 #include "Corridor.h"
 #include "GameFramework/Actor.h"
 #include "Engine/StaticMesh.h"
 
 // Sets default values
-ACoin::ACoin()
+AItem::AItem()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -28,20 +28,20 @@ ACoin::ACoin()
 	SoundToSpawn->bStopWhenOwnerDestroyed = false; // Play after coin destroy
 }
 
-void ACoin::BeginPlay()
+void AItem::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CollisionCapsule->OnComponentBeginOverlap.AddDynamic(this, &ACoin::OnOverlapBegin);
+	CollisionCapsule->OnComponentBeginOverlap.AddDynamic(this, &AItem::OnPickUp);
 }
 
-void ACoin::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AItem::OnPickUp(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	// If gameinstance exists and overlapped actor is equal to player hero. Only one hero in the game, so only check his name.
-	if (GameInstance && GameInstance->Runner == OtherActor)
+	if (GameInstance && GameInstance->Player == OtherActor)
 	{
 		// Increase number of collected items
-		GameInstance->CollectedItem++;
+		GameInstance->CollectedItems++;
 
 		SoundToSpawn->Play(); // Coin is collected, give sound!
 
@@ -51,12 +51,12 @@ void ACoin::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 	}
 }
 // Avoid to cast redundants
-void ACoin::SetGameInstance(UMyGameInstance* pGameInstance)
+void AItem::SetGameInstance(UMyGameInstance* GameInstanceToSet)
 {
-	GameInstance = pGameInstance;
+	GameInstance = GameInstanceToSet;
 }
 
-void ACoin::SetCorridor(ACorridor* Corridor)
+void AItem::SetCorridor(ACorridor* CorridorToSet)
 {
-	AttachedCorridor = Corridor;
+	AttachedCorridor = CorridorToSet;
 }
